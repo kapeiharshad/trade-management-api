@@ -1,0 +1,40 @@
+{
+  "name": "trade-management-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kapeiharshad/trade-management-api.git"
+  },
+  "author": "Harshad Kapei",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kapeiharshad/trade-management-api/issues"
+  },
+  "homepage": "https://github.com/kapeiharshad/trade-management-api#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.7",
+    "swagger-jsdoc": "^6.2.0",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
+    "prettier": "^2.6.1"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
+  }
+}
