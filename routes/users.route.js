@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Utility = require('../helpers/utility');
 const UserService = require('../services/users.service');
-const { addUser } = require('../validation');
+const { addUser, editUser, getUser } = require('../validation');
 
 /**
  * @swagger
@@ -15,7 +15,34 @@ const { addUser } = require('../validation');
  */
 router.post('/', addUser, async (req, res) => {
   try {
-    const result = await UserService.addUser(req.body.name);
+    const result = await UserService.addUser({ body: req.body });
+    if (result.error) {
+      return Utility.render(res, { success: false, msg: result.error });
+    }
+    return Utility.render(res, result);
+  } catch (error) {
+    return Utility.render(res, { success: false, msg: error });
+  }
+});
+
+router.patch('/:userId', editUser, async (req, res) => {
+  try {
+    const result = await UserService.editUser({
+      body: req.body,
+      params: req.params,
+    });
+    if (result.error) {
+      return Utility.render(res, { success: false, msg: result.error });
+    }
+    return Utility.render(res, result);
+  } catch (error) {
+    return Utility.render(res, { success: false, msg: error });
+  }
+});
+
+router.get('/:userId', getUser, async (req, res) => {
+  try {
+    const result = await UserService.getUser({ params: req.params });
     if (result.error) {
       return Utility.render(res, { success: false, msg: result.error });
     }
