@@ -1,5 +1,6 @@
 const User = require('../models/users.model');
 const logger = require('../helpers/logger');
+const pagination = require('../helpers/pagination');
 class UserService {
   static async addUser({ body }) {
     try {
@@ -103,6 +104,33 @@ class UserService {
     }
   }
 
-  static async getUser({ body }) {}
+  static async getUser({ query }) {
+    try {
+      const projection = {
+        // userName: 1,
+        // firstName: 1,
+        // lastName: 1,
+      };
+      const paginationObj = new pagination();
+      const docs = await paginationObj.generatePagination(
+        User,
+        query,
+        projection,
+      );
+      return {
+        success: true,
+        statusCode: 200,
+        msg: 'Users fected successfully.',
+        records: docs,
+      };
+    } catch (error) {
+      logger.error('From getUser error', { errorMsg: error });
+      return {
+        success: false,
+        statusCode: 500,
+        msg: 'An error occurs',
+      };
+    }
+  }
 }
 module.exports = UserService;

@@ -66,12 +66,23 @@ exports.editUser = [
 ];
 
 exports.getUser = [
-  check('userId').custom(value => {
-    if (ObjectID.isValid(value)) {
-      return value;
-    } else {
-      throw new Error('Invalid objectId');
-    }
+  check('limit')
+    .matches(/^\d+$/)
+    .withMessage('must contain a whole number')
+    .optional(),
+  check('page')
+    .matches(/^\d+$/)
+    .withMessage('must contain a whole number')
+    .optional(),
+  check('sortDirection').custom(value => {
+    const splitArray = value.split(',');
+    splitArray.forEach(element => {
+      if (element !== 'asc' && element !== 'desc') {
+        throw new Error('Value must be "asc" or "desc" with "," seperate');
+      }
+    });
+    return value;
   }),
+
   checkValidation(),
 ];

@@ -40,9 +40,9 @@ router.patch('/:userId', editUser, async (req, res) => {
   }
 });
 
-router.get('/:userId', getUser, async (req, res) => {
+router.get('/', getUser, async (req, res) => {
   try {
-    const result = await UserService.getUser({ params: req.params });
+    const result = await UserService.getUser({ query: req.query });
     if (result.error) {
       return Utility.render(res, { success: false, msg: result.error });
     }
