@@ -86,3 +86,25 @@ exports.getUser = [
 
   checkValidation(),
 ];
+
+exports.getUserById = [
+  check('userId').custom(value => {
+    if (ObjectID.isValid(value)) {
+      return value;
+    } else {
+      throw new Error('Invalid objectId');
+    }
+  }),
+  checkValidation(),
+];
+
+exports.deleteUser = [
+  check('userId').custom(value => {
+    if (ObjectID.isValid(value)) {
+      return value;
+    } else {
+      throw new Error('Invalid objectId');
+    }
+  }),
+  checkValidation(),
+];

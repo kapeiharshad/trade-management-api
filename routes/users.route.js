@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 const Utility = require('../helpers/utility');
 const UserService = require('../services/users.service');
-const { addUser, editUser, getUser } = require('../validation');
+const {
+  addUser,
+  editUser,
+  getUser,
+  getUserById,
+  deleteUser,
+} = require('../validation');
 
 /**
  * @swagger
@@ -43,6 +49,30 @@ router.patch('/:userId', editUser, async (req, res) => {
 router.get('/', getUser, async (req, res) => {
   try {
     const result = await UserService.getUser({ query: req.query });
+    if (result.error) {
+      return Utility.render(res, { success: false, msg: result.error });
+    }
+    return Utility.render(res, result);
+  } catch (error) {
+    return Utility.render(res, { success: false, msg: error });
+  }
+});
+
+router.get('/:userId', getUserById, async (req, res) => {
+  try {
+    const result = await UserService.getUserById({ params: req.params });
+    if (result.error) {
+      return Utility.render(res, { success: false, msg: result.error });
+    }
+    return Utility.render(res, result);
+  } catch (error) {
+    return Utility.render(res, { success: false, msg: error });
+  }
+});
+
+router.delete('/:userId', deleteUser, async (req, res) => {
+  try {
+    const result = await UserService.deleteUser({ params: req.params });
     if (result.error) {
       return Utility.render(res, { success: false, msg: result.error });
     }

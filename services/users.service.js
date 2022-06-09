@@ -1,6 +1,7 @@
 const User = require('../models/users.model');
 const logger = require('../helpers/logger');
 const pagination = require('../helpers/pagination');
+const mongoose = require('mongoose');
 class UserService {
   static async addUser({ body }) {
     try {
@@ -80,7 +81,10 @@ class UserService {
       if (body.status) {
         editObj.status = body.status;
       }
-      const userData = await User.updateOne({ _id: params.userId }, editObj);
+      const userData = await User.updateOne(
+        { _id: mongoose.Types.ObjectId(params.userId) },
+        editObj,
+      );
       if (userData && userData.modifiedCount) {
         return {
           success: true,
@@ -90,7 +94,7 @@ class UserService {
       } else {
         return {
           success: false,
-          statusCode: 400,
+          statusCode: 404,
           msg: 'User not founded or no content to modify.',
         };
       }
@@ -125,6 +129,65 @@ class UserService {
       };
     } catch (error) {
       logger.error('From getUser error', { errorMsg: error });
+      return {
+        success: false,
+        statusCode: 500,
+        msg: 'An error occurs',
+      };
+    }
+  }
+
+  static async getUserById({ params }) {
+    try {
+      const userData = await User.findOne({
+        _id: mongoose.Types.ObjectId(params.userId),
+        status: 'active',
+      });
+      if (userData) {
+        return {
+          success: true,
+          statusCode: 200,
+          msg: 'User fetched successfully.',
+          record: userData,
+        };
+      } else {
+        return {
+          success: false,
+          statusCode: 404,
+          msg: 'User not founded.',
+        };
+      }
+    } catch (error) {
+      logger.error('From getUser error', { errorMsg: error });
+      return {
+        success: false,
+        statusCode: 500,
+        msg: 'An error occurs',
+      };
+    }
+  }
+
+  static async deleteUser({ params }) {
+    try {
+      const deletedData = await User.updateOne(
+        { _id: mongoose.Types.ObjectId(params.userId) },
+        { status: 'inactive' },
+      );
+      if (deletedData && deletedData.modifiedCount) {
+        return {
+          success: true,
+          statusCode: 200,
+          msg: 'User deleted successfully.',
+        };
+      } else {
+        return {
+          success: false,
+          statusCode: 404,
+          msg: 'User not founded or deleted unsuccessfully.',
+        };
+      }
+    } catch (error) {
+      logger.error('From deleteUser error', { errorMsg: error });
       return {
         success: false,
         statusCode: 500,

@@ -109,7 +109,10 @@ class Pagination {
               });
             } else {
               match['$match'] = {
-                $and: [{ [key]: new RegExp(queryParams[key], 'gi') }],
+                $and: [
+                  { [key]: new RegExp(queryParams[key], 'gi') },
+                  { status: 'active' },
+                ],
               };
             }
             break;
