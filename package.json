@@ -26,6 +26,7 @@
     "express-validator": "^6.14.1",
     "mongodb": "^4.6.0",
     "mongoose": "^6.2.7",
+    "supertest": "^6.2.3",
     "swagger-jsdoc": "^6.2.0",
     "swagger-ui-express": "^4.3.0",
     "winston": "^3.7.2"

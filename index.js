@@ -81,3 +81,5 @@ if (!routeErr) {
     })
     .catch(err => logger.error('Db connection error ', { errorMsg: err }));
 }
+
+module.exports = app;
