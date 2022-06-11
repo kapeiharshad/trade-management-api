@@ -89,7 +89,7 @@ class Pagination {
             break;
           }
           case 'page': {
-            page = queryParams['page'];
+            page = parseInt(queryParams['page']);
             const skipNum = parseInt(queryParams['limit'])
               ? (page - 1) * parseInt(queryParams['limit'])
               : 0;

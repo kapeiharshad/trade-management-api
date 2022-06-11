@@ -124,7 +124,7 @@ class UserService {
       return {
         success: true,
         statusCode: 200,
-        msg: 'Users fected successfully.',
+        msg: 'Users fetched successfully.',
         records: docs,
       };
     } catch (error) {
