@@ -47,7 +47,11 @@ class Pagination {
     const aggregateData = [];
     let page = 1;
     let limitNum = 0;
-    const match = {};
+    const match = {
+      $match: {
+        $and: [{ status: 'active' }],
+      },
+    };
     let limit = {};
     const sort = {};
     let skip = {};
