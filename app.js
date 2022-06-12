@@ -6,7 +6,7 @@ const path = require('path');
 
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const logger = require('./helpers/logger');
+const logger = require('./helpers/logger.helper');
 
 // middleware
 app.use(cookieParser());

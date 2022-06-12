@@ -1,6 +1,6 @@
 const User = require('../models/users.model');
-const logger = require('../helpers/logger');
-const pagination = require('../helpers/pagination');
+const logger = require('../helpers/logger.helper');
+const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
 class UserService {
   static async addUser({ body }) {

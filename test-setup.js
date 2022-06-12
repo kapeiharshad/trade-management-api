@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.promise = global.Promise;
 const app = require('./app');
-const logger = require('./helpers/logger');
+const logger = require('./helpers/logger.helper');
 
 async function removeAllCollections() {
   const collections = Object.keys(mongoose.connection.collections);

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-const logger = require('./helpers/logger');
+const logger = require('./helpers/logger.helper');
 const app = require('./app');
 
 // database connection
