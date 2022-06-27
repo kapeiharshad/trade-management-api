@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 module.exports = function (modes) {
   return async function (req, res, next) {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       const msgString = `${errors.array()[0].msg} of '${
         errors.array()[0].param

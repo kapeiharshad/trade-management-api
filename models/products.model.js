@@ -20,10 +20,10 @@ const ProductSchema = new Schema(
       required: true,
     },
     productImage: [productImageSchema],
-    finalAmount: {
-      type: Number,
-      required: true,
-    },
+    // finalAmount: {
+    //   type: Number,
+    //   required: true,
+    // },
     discount: {
       type: Number,
       required: true,
