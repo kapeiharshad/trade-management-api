@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^3.0.1",
-    "husky": "^7.0.4",
+    "husky": "6",
     "jest": "^28.1.0",
     "prettier": "^2.6.1"
   }
