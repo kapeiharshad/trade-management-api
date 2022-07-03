@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const ObjectID = require('mongodb').ObjectID;
-const checkValidation = require('./middlewares/validation.middleware');
+const { checkValidation } = require('./middlewares/validation.middleware');
 
 exports.addUser = [
   check('userName', 'userName is invalid')

@@ -2,7 +2,7 @@
 
 This is a server repository for trade management.
 
-Commands :- 
+Commands :-
 
 npm run start -> To start server.
 
