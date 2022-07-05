@@ -9,10 +9,10 @@ router.post('/login', async (req, res) => {
       req.body.email,
       req.body.password,
     );
-    if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+    if (loginResult.error) {
+      return Render.render(res, { success: false, msg: loginResult.error });
     }
-    return Render.render(res, result);
+    return Render.render(res, loginResult);
   } catch (error) {
     return Render.render(res, { success: false, msg: error });
   }
