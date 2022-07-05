@@ -61,5 +61,42 @@ class AuthService {
       };
     }
   }
+
+  static async changePassword(userData, oldPassword, newPassword) {
+    try {
+      const user = await User.findOne({
+        _id: mongoose.Types.ObjectId(userData._id),
+      });
+      const isPasswordSame = await bcrypt.compare(oldPassword, user.password);
+      console.log('from isPasswordSame:::', isPasswordSame);
+      if (isPasswordSame) {
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(newPassword, salt);
+        const updatePassword = await User.updateOne(
+          { _id: mongoose.Types.ObjectId(user._id) },
+          { password: hash },
+        );
+        if (updatePassword && updatePassword.modifiedCount) {
+          return {
+            success: true,
+            msg: 'Password changed successfully',
+          };
+        } else {
+          throw new Error('Error while updating user password.');
+        }
+      }
+      return {
+        success: false,
+        statusCode: 400,
+        msg: "Entered password's didn't matched.",
+      };
+    } catch (error) {
+      logger.error('From changePassword api error', { errorMsg: error });
+      return {
+        success: false,
+        msg: error,
+      };
+    }
+  }
 }
 module.exports = AuthService;

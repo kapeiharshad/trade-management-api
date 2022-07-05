@@ -17,4 +17,20 @@ router.post('/login', async (req, res) => {
     return Render.render(res, { success: false, msg: error });
   }
 });
+
+router.post('/changePassword', async (req, res) => {
+  try {
+    const loginResult = await AuthService.changePassword(
+      req.userData,
+      req.body.oldPassword,
+      req.body.newPassword,
+    );
+    if (loginResult.error) {
+      return Render.render(res, { success: false, msg: loginResult.error });
+    }
+    return Render.render(res, loginResult);
+  } catch (error) {
+    return Render.render(res, { success: false, msg: error });
+  }
+});
 module.exports = router;

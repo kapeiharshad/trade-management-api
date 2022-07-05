@@ -23,7 +23,7 @@ class JWT {
   static async jwtVerify(req, secret = null) {
     secret = process.env.JWT_TOKEN_SECRET ? process.env.JWT_TOKEN_SECRET : '';
     if (secret) {
-      const token = JWT.getRequestToken(req);
+      const token = await JWT.getRequestToken(req);
       if (token) {
         return jwt.verify(token, secret);
       }

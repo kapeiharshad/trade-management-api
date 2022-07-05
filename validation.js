@@ -1,8 +1,14 @@
 const { check } = require('express-validator');
 const ObjectID = require('mongodb').ObjectID;
-const { checkValidation } = require('./middlewares/validation.middleware');
+const {
+  checkValidation,
+  authentication,
+  checkDuplicates,
+} = require('./middlewares/customValidation.middleware');
+const User = require('./models/users.model');
 
 exports.addUser = [
+  authentication(),
   check('userName', 'userName is invalid')
     .isString()
     .isLength({ min: 1, max: 100 })
@@ -26,6 +32,7 @@ exports.addUser = [
   check('password', 'password is invalid').isString(),
   check('userType', 'userType is invalid').isString().optional(),
   check('status', 'status is invalid').isString().optional(),
+  checkDuplicates(User, ['userName', 'contact', 'email']),
   checkValidation(),
 ];
 
