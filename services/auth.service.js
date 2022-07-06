@@ -68,7 +68,6 @@ class AuthService {
         _id: mongoose.Types.ObjectId(userData._id),
       });
       const isPasswordSame = await bcrypt.compare(oldPassword, user.password);
-      console.log('from isPasswordSame:::', isPasswordSame);
       if (isPasswordSame) {
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(newPassword, salt);

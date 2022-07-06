@@ -116,3 +116,14 @@ exports.deleteUser = [
   }),
   checkValidation(),
 ];
+
+exports.login = [
+  check('email').isEmail().withMessage('must be a valid email'),
+  check('password')
+    .isString()
+    .isLength({ min: 1 })
+    .withMessage('must be a valid string'),
+  checkValidation(),
+];
+
+exports.changePassword = [authentication(), checkValidation()];

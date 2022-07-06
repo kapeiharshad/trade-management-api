@@ -3,7 +3,9 @@ const router = express.Router();
 const Render = require('../helpers/render.helper');
 const AuthService = require('../services/auth.service');
 
-router.post('/login', async (req, res) => {
+const { login, changePassword } = require('../validation');
+
+router.post('/login', login, async (req, res) => {
   try {
     const loginResult = await AuthService.login(
       req.body.email,
@@ -18,7 +20,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/changePassword', async (req, res) => {
+router.post('/changePassword', changePassword, async (req, res) => {
   try {
     const loginResult = await AuthService.changePassword(
       req.userData,
