@@ -29,7 +29,7 @@ exports.addUser = [
     .withMessage('length should be 10 characters'),
   check('gender', 'gender is invalid').isString().optional(),
   check('email', 'email is invalid').isEmail(),
-  check('password', 'password is invalid').isString(),
+  check('password', 'password is invalid').isString().isLength({ min: 8 }),
   check('userType', 'userType is invalid').isString().optional(),
   check('status', 'status is invalid').isString().optional(),
   checkDuplicates(User, ['userName', 'contact', 'email']),
@@ -126,4 +126,17 @@ exports.login = [
   checkValidation(),
 ];
 
-exports.changePassword = [authentication(), checkValidation()];
+exports.changePassword = [
+  authentication(),
+  check('oldPassword')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 8 })
+    .withMessage('must be a atleast 8 character length'),
+  check('newPassword')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 8 })
+    .withMessage('must be a atleast 8 character length'),
+  checkValidation(),
+];
