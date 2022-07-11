@@ -161,20 +161,14 @@ class AuthService {
               subject: emailTemplate.subject,
             },
           };
-
-          const mailResult = await Mailer.sendEmail(mailData);
-          if (mailResult) {
-            return {
-              success: true,
-              msg:
-                'The reset password link has been sent to your email address successfully',
-            };
-          } else {
-            return {
-              success: false,
-              msg: 'Something goes to wrong. Please try again',
-            };
-          }
+          new Promise(async () => {
+            await Mailer.sendEmail(mailData);
+          });
+          return {
+            success: true,
+            msg:
+              'The reset password link has been sent to your email address successfully',
+          };
         } else {
           throw new Error('Error while saving user token');
         }
@@ -187,6 +181,73 @@ class AuthService {
       }
     } catch (error) {
       logger.error('From forgotPassword api error', { errorMsg: error });
+      return {
+        success: false,
+        msg: error,
+      };
+    }
+  }
+
+  static async resetPasswordVerify({ body }) {
+    try {
+      const userToken = await UserToken.findOne({
+        type: 'randToken',
+        token: body.token,
+      });
+      if (userToken && userToken.expiryTime > Date.now()) {
+        return {
+          success: true,
+          msg: 'Link verified successfully',
+        };
+      } else {
+        return {
+          success: false,
+          statusCode: 400,
+          msg: 'Link verified unsuccessfully',
+        };
+      }
+    } catch (error) {
+      logger.error('From resetPasswordVerify api error', { errorMsg: error });
+      return {
+        success: false,
+        msg: error,
+      };
+    }
+  }
+
+  static async resetPassword({ body }) {
+    try {
+      const userToken = await UserToken.findOne({
+        type: 'randToken',
+        token: body.token,
+      });
+      if (userToken && userToken.expiryTime > Date.now()) {
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(body.newPassword, salt);
+        const updatePassword = await User.updateOne(
+          { _id: mongoose.Types.ObjectId(userToken.userId) },
+          { password: hash },
+        );
+        if (updatePassword && updatePassword.modifiedCount) {
+          new Promise(async () => {
+            await UserToken.deleteOne({ type: 'randToken', token: body.token });
+          });
+          return {
+            success: true,
+            msg: 'Password reset successfully',
+          };
+        } else {
+          throw new Error('Error while reseting user password.');
+        }
+      } else {
+        return {
+          success: false,
+          statusCode: 400,
+          msg: 'Reset password unsuccessfully',
+        };
+      }
+    } catch (error) {
+      logger.error('From resetPassword api error', { errorMsg: error });
       return {
         success: false,
         msg: error,

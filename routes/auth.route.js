@@ -22,15 +22,15 @@ router.post('/login', login, async (req, res) => {
 
 router.post('/changePassword', changePassword, async (req, res) => {
   try {
-    const loginResult = await AuthService.changePassword(
+    const result = await AuthService.changePassword(
       req.userData,
       req.body.oldPassword,
       req.body.newPassword,
     );
-    if (loginResult.error) {
-      return Render.render(res, { success: false, msg: loginResult.error });
+    if (result.error) {
+      return Render.render(res, { success: false, msg: result.error });
     }
-    return Render.render(res, loginResult);
+    return Render.render(res, result);
   } catch (error) {
     return Render.render(res, { success: false, msg: error });
   }
@@ -40,6 +40,24 @@ router.post('/forgotPassword', async (req, res) => {
   try {
     const forgotResult = await AuthService.forgotPassword({ body: req.body });
     return Render.render(res, forgotResult);
+  } catch (error) {
+    return Render.render(res, { success: false, msg: error });
+  }
+});
+
+router.post('/resetPasswordVerify', async (req, res) => {
+  try {
+    const result = await AuthService.resetPasswordVerify({ body: req.body });
+    return Render.render(res, result);
+  } catch (error) {
+    return Render.render(res, { success: false, msg: error });
+  }
+});
+
+router.post('/resetPassword', async (req, res) => {
+  try {
+    const result = await AuthService.resetPassword({ body: req.body });
+    return Render.render(res, result);
   } catch (error) {
     return Render.render(res, { success: false, msg: error });
   }
