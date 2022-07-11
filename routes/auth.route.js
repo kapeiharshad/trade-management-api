@@ -35,4 +35,13 @@ router.post('/changePassword', changePassword, async (req, res) => {
     return Render.render(res, { success: false, msg: error });
   }
 });
+
+router.post('/forgotPassword', async (req, res) => {
+  try {
+    const forgotResult = await AuthService.forgotPassword({ body: req.body });
+    return Render.render(res, forgotResult);
+  } catch (error) {
+    return Render.render(res, { success: false, msg: error });
+  }
+});
 module.exports = router;

@@ -1,11 +1,16 @@
 const User = require('../models/users.model');
 const UserToken = require('../models/userToken.model');
 const logger = require('../helpers/logger.helper');
+const Mailer = require('../helpers/mailer.helper');
+const EmailTemplate = require('../models/emailTemplate');
 
 const mongoose = require('mongoose');
 const JWT = require('../helpers/jwt.helper');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const crypto = require('crypto');
+const Mustache = require('mustache');
+const path = require('path');
 
 class AuthService {
   static async login(email, password) {
@@ -91,6 +96,97 @@ class AuthService {
       };
     } catch (error) {
       logger.error('From changePassword api error', { errorMsg: error });
+      return {
+        success: false,
+        msg: error,
+      };
+    }
+  }
+
+  static async forgotPassword({ body }) {
+    try {
+      const baseUrl = '';
+      const userData = await User.findOne({ email: body.email });
+      if (userData) {
+        const buf = crypto.randomBytes(48);
+        const randToken = buf.toString('hex');
+        const expiryTime = moment()
+          .add({ days: process.env.JWT_TOKEN_EXPIRE_IN_DAY })
+          .toDate();
+        const saveUserToken = await UserToken.updateOne(
+          { userId: mongoose.Types.ObjectId(userData._id), type: 'randToken' },
+          {
+            $set: {
+              userId: mongoose.Types.ObjectId(userData._id),
+              token: randToken,
+              expiryTime: expiryTime,
+              type: 'randToken',
+            },
+          },
+          { upsert: true },
+        );
+        if (
+          saveUserToken &&
+          (saveUserToken.modifiedCount || saveUserToken.upsertedCount)
+        ) {
+          const emailTemplate = await EmailTemplate.findOne({
+            type: 'forgotPassword',
+          });
+          const view = {
+            Url: `${baseUrl}/reset-password/${randToken}`,
+            Name: userData.userName || '',
+            currentYear: new Date().getFullYear(),
+          };
+          const emailBody = Mustache.render(emailTemplate.description, view);
+          let mailData = {
+            message: {
+              to: body.email,
+              attachments: [
+                {
+                  filename: 'logo.jpg',
+                  path: './templates/images/logo.jpg',
+                  cid: 'logo.jpg',
+                },
+              ],
+            },
+            template: path.join(
+              __dirname,
+              '..',
+              'templates',
+              'emails',
+              'forgotEmailTemplate',
+            ),
+            locals: {
+              emailBody,
+              subject: emailTemplate.subject,
+            },
+          };
+
+          const mailResult = await Mailer.sendEmail(mailData);
+          if (mailResult) {
+            return {
+              success: true,
+              msg:
+                'The reset password link has been sent to your email address successfully',
+            };
+          } else {
+            return {
+              success: false,
+              msg: 'Something goes to wrong. Please try again',
+            };
+          }
+        } else {
+          throw new Error('Error while saving user token');
+        }
+      } else {
+        return {
+          success: false,
+          statusCode: 400,
+          msg: 'The Email is not registered with us',
+        };
+      }
+    } catch (error) {
+      logger.error('From forgotPassword api error', { errorMsg: error });
       return {
         success: false,
         msg: error,

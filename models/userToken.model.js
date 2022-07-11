@@ -17,7 +17,7 @@ const UserTokenSchema = new Schema(
     },
     type: {
       type: String,
-      enum: ['accessToken', 'refershToken'],
+      enum: ['accessToken', 'refershToken', 'randToken'],
       required: true,
     },
   },
