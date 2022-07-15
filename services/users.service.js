@@ -98,7 +98,7 @@ class UserService {
       } else {
         return {
           success: false,
-          statusCode: 404,
+          statusCode: 400,
           msg: 'User not founded or no content to modify.',
         };
       }
@@ -157,7 +157,7 @@ class UserService {
       } else {
         return {
           success: false,
-          statusCode: 404,
+          statusCode: 400,
           msg: 'User not founded.',
         };
       }
@@ -186,7 +186,7 @@ class UserService {
       } else {
         return {
           success: false,
-          statusCode: 404,
+          statusCode: 400,
           msg: 'User not founded or deleted unsuccessfully.',
         };
       }

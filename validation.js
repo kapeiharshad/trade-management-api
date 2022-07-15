@@ -140,3 +140,36 @@ exports.changePassword = [
     .withMessage('must be a atleast 8 character length'),
   checkValidation(),
 ];
+
+exports.forgotPassword = [
+  check('email').isEmail().withMessage('must be a valid email'),
+  checkValidation(),
+];
+
+exports.resetPasswordVerify = [
+  check('token')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 1 })
+    .withMessage('token on body must not be empty'),
+  checkValidation(),
+];
+
+exports.resetPassword = [
+  check('token')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 1 })
+    .withMessage('token on body must not be empty'),
+  check('newPassword', 'Max 15 characters are allowed').isLength({ min: 8 }),
+  checkValidation(),
+];
+
+exports.logoutValidation = [
+  check('token')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 1 })
+    .optional(),
+  checkValidation(),
+];

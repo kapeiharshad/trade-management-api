@@ -254,5 +254,34 @@ class AuthService {
       };
     }
   }
+
+  static async logout(headerToken, body) {
+    console.log('from headerToken:::', headerToken);
+    console.log('from body:::', body);
+    try {
+      if (!headerToken && !body) {
+        console.log('from iff::::::::::');
+        return {
+          success: false,
+          statusCode: 400,
+          msg: 'Must contains token on request body or header',
+        };
+      }
+      await UserToken.deleteMany({ token: headerToken });
+      if (body.hasOwnProperty('token')) {
+        await UserToken.deleteMany({ token: body.token });
+      }
+      return {
+        success: true,
+        msg: 'Logout successfully',
+      };
+    } catch (error) {
+      logger.error('From logout api error', { errorMsg: error });
+      return {
+        success: false,
+        msg: error,
+      };
+    }
+  }
 }
 module.exports = AuthService;
