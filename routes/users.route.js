@@ -14,6 +14,8 @@ const {
  * @swagger
  * /users/:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will create user.
  *     tags:
  *      - users
@@ -55,12 +57,6 @@ const {
  *               status:
  *                 type: string
  *                 example: active
- *               createdAt:
- *                 type: date
- *                 example: 2022-06-06T13:36:25.766Z
- *               updatedAt:
- *                 type: date
- *                 example: 2022-06-06T13:36:25.766Z
  *     responses:
  *       200:
  *         description: Success response.
@@ -121,6 +117,8 @@ router.post('/', addUser, async (req, res) => {
  * @swagger
  * /users/{userId}:
  *   patch:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will edit user.
  *     tags:
  *      - users
@@ -200,6 +198,8 @@ router.patch('/:userId', editUser, async (req, res) => {
  * @swagger
  * /users/:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will get all match users with pagination.
  *     tags:
  *      - users
@@ -334,6 +334,8 @@ router.get('/', getUser, async (req, res) => {
  * @swagger
  * /users/{userId}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will get user by its id.
  *     tags:
  *      - users
@@ -444,6 +446,8 @@ router.get('/:userId', getUserById, async (req, res) => {
  * @swagger
  * /users/{userId}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will delete user by its id.
  *     tags:
  *      - users
