@@ -256,11 +256,8 @@ class AuthService {
   }
 
   static async logout(headerToken, body) {
-    console.log('from headerToken:::', headerToken);
-    console.log('from body:::', body);
     try {
       if (!headerToken && !body) {
-        console.log('from iff::::::::::');
         return {
           success: false,
           statusCode: 400,

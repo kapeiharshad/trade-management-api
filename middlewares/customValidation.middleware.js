@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 
-const Render = require('../helpers/render.helper');
+const Util = require('../helpers/util.helper');
 const JWT = require('../helpers/jwt.helper');
 const UserToken = require('../models/userToken.model');
 const mongoose = require('mongoose');
@@ -30,7 +30,7 @@ async function generateResult(
             msg: message,
             errors: error,
           };
-    Render.render(res, msgError);
+    Util.render(res, msgError);
   }
   return false;
 }
