@@ -257,7 +257,7 @@ class AuthService {
 
   static async logout(headerToken, body) {
     try {
-      if (!headerToken && !body) {
+      if (!headerToken && body && !body.token) {
         return {
           success: false,
           statusCode: 400,
