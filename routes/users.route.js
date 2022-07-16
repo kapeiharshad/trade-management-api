@@ -15,6 +15,8 @@ const {
  * /users/:
  *   post:
  *     description: This api will create user.
+ *     tags:
+ *      - users
  *     requestBody:
  *       required: true
  *       content:
@@ -120,6 +122,8 @@ router.post('/', addUser, async (req, res) => {
  * /users/{userId}:
  *   patch:
  *     description: This api will edit user.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: path
  *         name: userId
@@ -197,6 +201,8 @@ router.patch('/:userId', editUser, async (req, res) => {
  * /users/:
  *   get:
  *     description: This api will get all match users with pagination.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: query
  *         name: limit
@@ -329,6 +335,8 @@ router.get('/', getUser, async (req, res) => {
  * /users/{userId}:
  *   get:
  *     description: This api will get user by its id.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: path
  *         name: userId
@@ -437,6 +445,8 @@ router.get('/:userId', getUserById, async (req, res) => {
  * /users/{userId}:
  *   delete:
  *     description: This api will delete user by its id.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: path
  *         name: userId
