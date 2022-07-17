@@ -2,18 +2,15 @@ const User = require('../models/users.model');
 const logger = require('../helpers/logger.helper');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 class UserService {
   static async addUser({ body }) {
     try {
-      const salt = await bcrypt.genSalt();
-      const hash = await bcrypt.hash(body.password, salt);
       const saveObj = {
         userName: body.userName,
         contact: body.contact,
         email: body.email,
-        password: hash,
+        password: body.password,
       };
       if (body.firstName) {
         saveObj.firstName = body.firstName;
@@ -30,7 +27,8 @@ class UserService {
       if (body.status) {
         saveObj.status = body.status;
       }
-      const userData = await User.create(saveObj);
+      const saveUserObj = new User(saveObj);
+      const userData = await saveUserObj.save();
       if (userData && userData.id) {
         return {
           success: true,
