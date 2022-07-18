@@ -10,6 +10,13 @@
     "format": "prettier --write .",
     "prepare": "husky install"
   },
+  "jest": {
+    "verbose": true,
+    "testSequencer": "<rootDir>/test/test-config/testSequencer.js",
+    "setupFiles": [
+      "dotenv/config"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kapeiharshad/trade-management-api.git"

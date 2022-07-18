@@ -27,8 +27,7 @@ class UserService {
       if (body.status) {
         saveObj.status = body.status;
       }
-      const saveUserObj = new User(saveObj);
-      const userData = await saveUserObj.save();
+      const userData = await User.create(saveObj);
       if (userData && userData.id) {
         return {
           success: true,
