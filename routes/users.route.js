@@ -164,7 +164,7 @@ router.post('/', addUser, async (req, res) => {
  *                   example: false
  *                 msg:
  *                   type: string
- *                   example: User not founded or no content to modify.
+ *                   example: User not found or no content to modify.
  *       500:
  *         description: Server Error response.
  *         content:
@@ -483,7 +483,7 @@ router.get('/:userId', getUserById, async (req, res) => {
  *                   example: false
  *                 msg:
  *                   type: string
- *                   example: User not founded or deleted unsuccessfully.
+ *                   example: User not found or deleted unsuccessfully.
  *       500:
  *         description: Server Error response.
  *         content:

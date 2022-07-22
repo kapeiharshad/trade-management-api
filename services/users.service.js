@@ -96,7 +96,7 @@ class UserService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'User not founded or no content to modify.',
+          msg: 'User not found or no content to modify.',
         };
       }
     } catch (error) {
