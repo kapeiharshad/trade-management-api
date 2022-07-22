@@ -1,4 +1,4 @@
-class Render {
+class Util {
   static render(res, result) {
     if (!result.success) {
       if (result.statusCode) {
@@ -15,4 +15,4 @@ class Render {
     res.json(result);
   }
 }
-module.exports = Render;
+module.exports = Util;

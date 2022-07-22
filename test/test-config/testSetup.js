@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.promise = global.Promise;
-const app = require('./app');
-const logger = require('./helpers/logger.helper');
+const { seedDatabase } = require('../../seeds');
+const logger = require('../../helpers/logger.helper');
 
 async function removeAllCollections() {
   const collections = Object.keys(mongoose.connection.collections);
@@ -32,17 +32,17 @@ async function dropAllCollections() {
 }
 
 module.exports = {
-  setupDB() {
+  setupDB(runSaveMiddleware = false) {
+    let connectionDB = '';
     // Connect to Mongoose
     beforeAll(async () => {
       try {
         const url = 'mongodb://localhost:27017/test_trade_managements';
-        await mongoose.connect(url, {
+        connectionDB = await mongoose.connect(url, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
         });
-        // app.listen(3100);
-        // logger.info(`Test Server listening at ${3100}`);
+        await seedDatabase(runSaveMiddleware);
       } catch (error) {
         logger.error('Test Server connection error ', { errorMsg: error });
       }
@@ -53,6 +53,7 @@ module.exports = {
       try {
         await removeAllCollections();
         await dropAllCollections();
+        await connectionDB.connection.db.dropDatabase();
         await mongoose.connection.close();
       } catch (error) {
         logger.error('Test Server disconnection error ', { errorMsg: error });

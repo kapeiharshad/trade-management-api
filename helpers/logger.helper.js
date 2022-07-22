@@ -11,7 +11,10 @@ const myFormat = printf(({ level, message, timestamp }) => {
 
 let logger = null;
 
-if (process.env.NODE_ENV === 'production') {
+if (
+  process.env.NODE_ENV === 'production' ||
+  process.env.NODE_ENV === 'staging'
+) {
   logger = createLogger({
     level: 'silly',
     format: combine(timestamp(), myFormat, prettyPrint()),
