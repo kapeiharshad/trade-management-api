@@ -155,7 +155,7 @@ class UserService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'User not founded.',
+          msg: 'User not found.',
         };
       }
     } catch (error) {
@@ -184,7 +184,7 @@ class UserService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'User not founded or deleted unsuccessfully.',
+          msg: 'User not found or deleted unsuccessfully.',
         };
       }
     } catch (error) {

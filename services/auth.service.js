@@ -62,6 +62,7 @@ class AuthService {
       logger.error('From login api error', { errorMsg: error });
       return {
         success: false,
+        statusCode: 500,
         msg: 'An error occurs',
       };
     }
@@ -98,6 +99,7 @@ class AuthService {
       logger.error('From changePassword api error', { errorMsg: error });
       return {
         success: false,
+        statusCode: 500,
         msg: 'An error occurs',
       };
     }
@@ -183,6 +185,7 @@ class AuthService {
       logger.error('From forgotPassword api error', { errorMsg: error });
       return {
         success: false,
+        statusCode: 500,
         msg: error,
       };
     }
@@ -210,6 +213,7 @@ class AuthService {
       logger.error('From resetPasswordVerify api error', { errorMsg: error });
       return {
         success: false,
+        statusCode: 500,
         msg: 'An error occurs',
       };
     }
@@ -250,6 +254,7 @@ class AuthService {
       logger.error('From resetPassword api error', { errorMsg: error });
       return {
         success: false,
+        statusCode: 500,
         msg: 'An error occurs',
       };
     }
@@ -276,6 +281,7 @@ class AuthService {
       logger.error('From logout api error', { errorMsg: error });
       return {
         success: false,
+        statusCode: 500,
         msg: 'An error occurs',
       };
     }
