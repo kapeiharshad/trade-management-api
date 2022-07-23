@@ -180,6 +180,10 @@ exports.createCategory = [
     .isString()
     .isLength({ min: 1, max: 100 })
     .withMessage('length should be between 1 to 100 characters'),
+  check('categoryStatus', 'categoryStatus is invalid')
+    .isString()
+    .isLength({ min: 6, max: 8 })
+    .optional(),
   checkValidation(),
 ];
 exports.editCategory = [
@@ -194,12 +198,7 @@ exports.editCategory = [
   check('categoryName', 'categoryName is invalid')
     .isString()
     .isLength({ min: 1, max: 100 })
-    .withMessage('length should be between 1 to 100 characters')
-    .optional(),
-  check('categoryStatus', 'categoryStatus is invalid')
-    .isString()
-    .isLength({ min: 6, max: 8 })
-    .optional(),
+    .withMessage('length should be between 1 to 100 characters'),
   checkValidation(),
 ];
 exports.getCategory = [
@@ -270,10 +269,6 @@ exports.editProduct = [
   check('discount')
     .matches(/^\d+$/)
     .withMessage('must contain a whole number')
-    .optional(),
-  check('productStatus', 'productStatus is invalid')
-    .isString()
-    .isLength({ min: 6, max: 8 })
     .optional(),
   checkValidation(),
 ];
