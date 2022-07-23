@@ -1,8 +1,14 @@
 const { check } = require('express-validator');
 const ObjectID = require('mongodb').ObjectID;
-const checkValidation = require('./middlewares/validation.middleware');
+const {
+  checkValidation,
+  authentication,
+  checkDuplicates,
+} = require('./middlewares/customValidation.middleware');
+const User = require('./models/users.model');
 
 exports.addUser = [
+  authentication(),
   check('userName', 'userName is invalid')
     .isString()
     .isLength({ min: 1, max: 100 })
@@ -23,9 +29,10 @@ exports.addUser = [
     .withMessage('length should be 10 characters'),
   check('gender', 'gender is invalid').isString().optional(),
   check('email', 'email is invalid').isEmail(),
-  check('password', 'password is invalid').isString(),
+  check('password', 'password is invalid').isString().isLength({ min: 8 }),
   check('userType', 'userType is invalid').isString().optional(),
   check('status', 'status is invalid').isString().optional(),
+  checkDuplicates(User, ['userName', 'contact', 'email']),
   checkValidation(),
 ];
 
@@ -107,5 +114,62 @@ exports.deleteUser = [
       throw new Error('Invalid objectId');
     }
   }),
+  checkValidation(),
+];
+
+exports.login = [
+  check('email').isEmail().withMessage('must be a valid email'),
+  check('password')
+    .isString()
+    .isLength({ min: 1 })
+    .withMessage('must be a valid string'),
+  checkValidation(),
+];
+
+exports.changePassword = [
+  authentication(),
+  check('oldPassword')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 8 })
+    .withMessage('must be a atleast 8 character length'),
+  check('newPassword')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 8 })
+    .withMessage('must be a atleast 8 character length'),
+  checkValidation(),
+];
+
+exports.forgotPassword = [
+  check('email').isEmail().withMessage('must be a valid email'),
+  checkValidation(),
+];
+
+exports.resetPasswordVerify = [
+  check('token')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 1 })
+    .withMessage('token on body must not be empty'),
+  checkValidation(),
+];
+
+exports.resetPassword = [
+  check('token')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 1 })
+    .withMessage('token on body must not be empty'),
+  check('newPassword', 'Max 15 characters are allowed').isLength({ min: 8 }),
+  checkValidation(),
+];
+
+exports.logoutValidation = [
+  check('token')
+    .isString()
+    .withMessage('must be a valid string')
+    .isLength({ min: 1 })
+    .optional(),
   checkValidation(),
 ];

@@ -2,6 +2,7 @@ const User = require('../models/users.model');
 const logger = require('../helpers/logger.helper');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
+
 class UserService {
   static async addUser({ body }) {
     try {
@@ -94,8 +95,8 @@ class UserService {
       } else {
         return {
           success: false,
-          statusCode: 404,
-          msg: 'User not founded or no content to modify.',
+          statusCode: 400,
+          msg: 'User not found or no content to modify.',
         };
       }
     } catch (error) {
@@ -153,8 +154,8 @@ class UserService {
       } else {
         return {
           success: false,
-          statusCode: 404,
-          msg: 'User not founded.',
+          statusCode: 400,
+          msg: 'User not found.',
         };
       }
     } catch (error) {
@@ -182,8 +183,8 @@ class UserService {
       } else {
         return {
           success: false,
-          statusCode: 404,
-          msg: 'User not founded or deleted unsuccessfully.',
+          statusCode: 400,
+          msg: 'User not found or deleted unsuccessfully.',
         };
       }
     } catch (error) {

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Render = require('../helpers/render.helper');
+const Util = require('../helpers/util.helper');
 const UserService = require('../services/users.service');
 const {
   addUser,
@@ -14,7 +14,11 @@ const {
  * @swagger
  * /users/:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will create user.
+ *     tags:
+ *      - users
  *     requestBody:
  *       required: true
  *       content:
@@ -53,12 +57,6 @@ const {
  *               status:
  *                 type: string
  *                 example: active
- *               createdAt:
- *                 type: date
- *                 example: 2022-06-06T13:36:25.766Z
- *               updatedAt:
- *                 type: date
- *                 example: 2022-06-06T13:36:25.766Z
  *     responses:
  *       200:
  *         description: Success response.
@@ -107,11 +105,11 @@ router.post('/', addUser, async (req, res) => {
   try {
     const result = await UserService.addUser({ body: req.body });
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 
@@ -119,7 +117,11 @@ router.post('/', addUser, async (req, res) => {
  * @swagger
  * /users/{userId}:
  *   patch:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will edit user.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: path
  *         name: userId
@@ -162,7 +164,7 @@ router.post('/', addUser, async (req, res) => {
  *                   example: false
  *                 msg:
  *                   type: string
- *                   example: User not founded or no content to modify.
+ *                   example: User not found or no content to modify.
  *       500:
  *         description: Server Error response.
  *         content:
@@ -184,11 +186,11 @@ router.patch('/:user Id', editUser, async (req, res) => {
       params: req.params,
     });
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 
@@ -196,7 +198,11 @@ router.patch('/:user Id', editUser, async (req, res) => {
  * @swagger
  * /users/:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will get all match users with pagination.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: query
  *         name: limit
@@ -316,11 +322,11 @@ router.get('/', getUser, async (req, res) => {
   try {
     const result = await UserService.getUser({ query: req.query });
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 
@@ -328,7 +334,11 @@ router.get('/', getUser, async (req, res) => {
  * @swagger
  * /users/{userId}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will get user by its id.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: path
  *         name: userId
@@ -424,11 +434,11 @@ router.get('/:userId', getUserById, async (req, res) => {
   try {
     const result = await UserService.getUserById({ params: req.params });
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 
@@ -436,7 +446,11 @@ router.get('/:userId', getUserById, async (req, res) => {
  * @swagger
  * /users/{userId}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     description: This api will delete user by its id.
+ *     tags:
+ *      - users
  *     parameters:
  *       - in: path
  *         name: userId
@@ -469,7 +483,7 @@ router.get('/:userId', getUserById, async (req, res) => {
  *                   example: false
  *                 msg:
  *                   type: string
- *                   example: User not founded or deleted unsuccessfully.
+ *                   example: User not found or deleted unsuccessfully.
  *       500:
  *         description: Server Error response.
  *         content:
@@ -488,11 +502,11 @@ router.delete('/:userId', deleteUser, async (req, res) => {
   try {
     const result = await UserService.deleteUser({ params: req.params });
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 module.exports = router;
