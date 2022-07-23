@@ -6,6 +6,10 @@ const productImageSchema = new Schema(
       type: String,
       required: true,
     },
+    sequence: {
+      type: String,
+      required: true,
+    },
   },
   { _id: false },
 );

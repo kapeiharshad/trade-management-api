@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Render = require('../helpers/render.helper');
+const Util = require('../helpers/Util.helper');
 const CategoryService = require('../services/categories.service');
-// const {
-//   createCategory,
-//   editCategory,
-//   getCategory,
-//   getAllPaginatedCategories,
-// } = require('../validation');
+const {
+  createCategory,
+  editCategory,
+  getCategory,
+  // getAllPaginatedCategories,
+} = require('../validation');
 
 /**
  * @swagger
@@ -19,83 +19,80 @@ const CategoryService = require('../services/categories.service');
  *         description: Returns a hello string.
  */
 
-router.post('/', async (req, res) => {
+router.post('/', createCategory, async (req, res) => {
   try {
     const result = await CategoryService.createCategory({ body: req.body });
 
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
 
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    console.log("inside error of category", error)
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 
-router.patch('/:categoryId', async (req, res) => {
+router.patch('/:categoryId', editCategory, async (req, res) => {
   try {
-    console.log("categorrrr", req.params)
     const result = await CategoryService.editCategory({
       body: req.body,
       params: req.params,
     });
 
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
 
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 
-router.get('/:categoryId', async (req, res) => {
+router.get('/:categoryId', getCategory, async (req, res) => {
   try {
-    const result = await CategoryService.getCategoryById({ params: req.params });
+    const result = await CategoryService.getCategoryById({
+      params: req.params,
+    });
 
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
 
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 
-router.get(
-  '/',
-  async (req, res) => {
-    try {
-      const result = await CategoryService.getCategory({
-        query: req.query,
-      });
+router.get('/', async (req, res) => {
+  try {
+    const result = await CategoryService.getCategory({
+      query: req.query,
+    });
 
-      if (result.error) {
-        return Render.render(res, { success: false, msg: result.error });
-      }
-
-      return Render.render(res, result);
-    } catch (error) {
-      return Render.render(res, { success: false, msg: error });
+    if (result.error) {
+      return Util.render(res, { success: false, msg: result.error });
     }
-  },
-);
 
-router.delete('/:categoryId', deleteUser, async (req, res) => {
+    return Util.render(res, result);
+  } catch (error) {
+    return Util.render(res, { success: false, msg: error });
+  }
+});
+
+router.delete('/:categoryId', getCategory, async (req, res) => {
   try {
     const result = await CategoryService.deleteCategory({ params: req.params });
 
     if (result.error) {
-      return Render.render(res, { success: false, msg: result.error });
+      return Util.render(res, { success: false, msg: result.error });
     }
 
-    return Render.render(res, result);
+    return Util.render(res, result);
   } catch (error) {
-    return Render.render(res, { success: false, msg: error });
+    return Util.render(res, { success: false, msg: error });
   }
 });
 module.exports = router;

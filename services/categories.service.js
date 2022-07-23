@@ -1,8 +1,7 @@
-
 const logger = require('../helpers/logger.helper');
-const Category = require('../models/categories.model')
+const Category = require('../models/categories.model');
 const pagination = require('../helpers/pagination.helper');
-const mongoose = require("mongoose")
+const mongoose = require('mongoose');
 class CategoryService {
   static async createCategory({ body }) {
     try {
@@ -30,7 +29,6 @@ class CategoryService {
         msg: 'Failed To Add Category',
       };
     } catch (error) {
-      console.log("ibsiddd err", error)
       logger.error('From create category error', { errorMsg: error });
 
       return {
@@ -43,30 +41,28 @@ class CategoryService {
 
   static async editCategory({ body, params }) {
     try {
-
-      let oneCategory = await Category.findOne({ _id: mongoose.Types.ObjectId(params.categoryId) })
-
-      const { _id } = oneCategory
-
-      if (!_id) return {
-        success: false,
-        statusCode: 400,
-        msg: 'Category Not Found',
-
-      }
-
-      const editObj = {};
-
-      if (body.categoryName) editObj.categoryName = body.categoryName;
-
-      if (body.categoryStatus) editObj.categoryStatus = body.categoryStatus;
-
-      const editOutput = await Category.updateOne(
-        { _id: params.categoryId },
-        editObj,
+      let oneCategory = await Category.findOne(
+        {
+          _id: mongoose.Types.ObjectId(params.categoryId),
+        },
+        {
+          categoryStatus: 1,
+        },
       );
 
-      if (editOutput && editOutput.modifiedCount) {
+      const { _id, categoryStatus } = oneCategory;
+
+      if (!_id || categoryStatus != 'active')
+        return {
+          success: false,
+          statusCode: 404,
+          msg: 'Category Not Found',
+        };
+
+      if (body.categoryName) oneCategory.categoryName = body.categoryName;
+
+      const editOutput = await oneCategory.save();
+      if (editOutput && editOutput._id) {
         return {
           success: true,
           statusCode: 200,
@@ -79,7 +75,6 @@ class CategoryService {
         statusCode: 400,
         msg: 'Failed To Update Category',
       };
-
     } catch (error) {
       logger.error('From edit category error', { errorMsg: error });
 
@@ -93,20 +88,22 @@ class CategoryService {
 
   static async getCategoryById({ params }) {
     try {
-      const categoryOutput = await Category.findOne({ _id: mongoose.Types.ObjectId(params.categoryId) });
+      const categoryOutput = await Category.findOne({
+        _id: mongoose.Types.ObjectId(params.categoryId),
+      });
 
       if (categoryOutput && categoryOutput._id) {
         return {
           success: true,
           statusCode: 200,
           msg: 'Categories Fetched Successfully',
-          data: categoryOutput,
+          record: categoryOutput,
         };
       }
 
       return {
         success: false,
-        statusCode: 204,
+        statusCode: 404,
         msg: 'Category Not Found',
       };
     } catch (error) {
@@ -123,11 +120,11 @@ class CategoryService {
   static async getCategory({ query }) {
     try {
       const projection = {
-        categoryName: 1
+        categoryName: 1,
       };
 
       const paginationObj = new pagination();
-      console.log("holaaaa", query)
+
       const docs = await paginationObj.generatePagination(
         Category,
         query,
@@ -140,12 +137,60 @@ class CategoryService {
         records: docs,
       };
     } catch (error) {
-      console.log("hiii", error)
       logger.error('From getCategories error', { errorMsg: error });
+
       return {
         success: false,
         statusCode: 500,
         msg: 'An error occurs',
+      };
+    }
+  }
+
+  static async deleteCategory({ params }) {
+    try {
+      let oneCategory = await Category.findOne(
+        { _id: mongoose.Types.ObjectId(params.categoryId) },
+        {
+          _id: 1,
+          categoryStatus: 1,
+        },
+      );
+
+      const { _id, categoryStatus } = oneCategory;
+
+      if (!_id || !categoryStatus || categoryStatus != 'active')
+        return {
+          success: false,
+          statusCode: 404,
+          msg: 'Category Not Found',
+        };
+
+      const deletedData = await Category.updateOne(
+        { _id: mongoose.Types.ObjectId(params.categoryId) },
+        { categoryStatus: 'inactive' },
+      );
+
+      if (deletedData && deletedData.modifiedCount) {
+        return {
+          success: true,
+          statusCode: 200,
+          msg: 'Category Deleted Successfully.',
+        };
+      }
+
+      return {
+        success: false,
+        statusCode: 400,
+        msg: 'Failed To Delete Category',
+      };
+    } catch (error) {
+      logger.error('From deleteCategory error', { errorMsg: error });
+
+      return {
+        success: false,
+        statusCode: 500,
+        msg: 'An Error Occured While Deleting Category',
       };
     }
   }
