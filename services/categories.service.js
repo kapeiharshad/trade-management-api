@@ -2,6 +2,7 @@ const logger = require('../helpers/logger.helper');
 const Category = require('../models/categories.model');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
+const Util = require('../helpers/Util.helper');
 class CategoryService {
   static async createCategory({ body }) {
     try {
@@ -12,6 +13,18 @@ class CategoryService {
       if (body.categoryStatus) {
         saveObj.categoryStatus = body.categoryStatus;
       }
+
+      const uniqueId = await Util.generateNanoId();
+
+      if (!uniqueId) {
+        return {
+          success: false,
+          statusCode: 400,
+          msg: 'Failed To Generate Unique CategoryId',
+        };
+      }
+
+      saveObj.categoryUniqueId = uniqueId;
 
       const createOutput = await Category.create(saveObj);
 

@@ -2,6 +2,7 @@ const logger = require('../helpers/logger.helper');
 const Product = require('../models/products.model');
 const Category = require('../models/categories.model');
 const mongoose = require('mongoose');
+const Util = require('../helpers/Util.helper');
 class ProductService {
   static async createProduct({ body }) {
     try {
@@ -42,6 +43,18 @@ class ProductService {
       if (body.productStatus) saveObj.productStatus = body.productStatus;
 
       if (body.discount) saveObj.discount = body.discount;
+
+      const uniqueId = await Util.generateNanoId();
+
+      if (!uniqueId) {
+        return {
+          success: false,
+          statusCode: 400,
+          msg: 'Failed To Generate Unique ProductId',
+        };
+      }
+
+      saveObj.productUniqueId = uniqueId;
 
       const createOutput = await Product.create(saveObj);
 

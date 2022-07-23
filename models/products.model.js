@@ -15,6 +15,11 @@ const productImageSchema = new Schema(
 );
 const ProductSchema = new Schema(
   {
+    productUniqueId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     productName: {
       type: String,
       required: true,

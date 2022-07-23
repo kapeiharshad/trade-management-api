@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const CategorySchema = new Schema(
   {
+    categoryUniqueId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     categoryName: {
       type: String,
       required: true,
