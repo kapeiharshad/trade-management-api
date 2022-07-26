@@ -186,6 +186,7 @@ exports.createCategory = [
     .optional(),
   checkValidation(),
 ];
+
 exports.editCategory = [
   authentication(),
   check('categoryId').custom(value => {
@@ -201,6 +202,7 @@ exports.editCategory = [
     .withMessage('length should be between 1 to 100 characters'),
   checkValidation(),
 ];
+
 exports.getCategory = [
   authentication(),
   check('categoryId').custom(value => {
@@ -212,6 +214,7 @@ exports.getCategory = [
   }),
   checkValidation(),
 ];
+
 exports.createProduct = [
   authentication(),
   check('categoryId').custom(value => {
@@ -219,6 +222,25 @@ exports.createProduct = [
       return value;
     } else {
       throw new Error('Invalid objectId');
+    }
+  }),
+  check('productImage')
+    .isArray()
+    .withMessage('productImage can not be empty and must be an array!'),
+  check('productImage').custom(async value => {
+    if (value == undefined || !value.length) {
+      throw new Error('productImage can not be empty and must be an array!');
+    } else {
+      value.forEach(singleImage => {
+        if (!singleImage.val || typeof singleImage.val != 'string') {
+          throw new Error('Product Images Are Not Valid');
+        } else if (
+          !singleImage.sequence ||
+          typeof singleImage.sequence != 'number'
+        ) {
+          throw new Error('Sequence Is Valid');
+        }
+      });
     }
   }),
   check('productName', 'productName is invalid')
@@ -239,6 +261,7 @@ exports.createProduct = [
     .optional(),
   checkValidation(),
 ];
+
 exports.editProduct = [
   check('productId').custom(value => {
     if (ObjectID.isValid(value)) {
@@ -256,6 +279,25 @@ exports.editProduct = [
       }
     })
     .optional(),
+  check('productImage')
+    .isArray()
+    .withMessage('productImage can not be empty and must be an array!'),
+  check('productImage').custom(async value => {
+    if (value == undefined || !value.length) {
+      throw new Error('productImage can not be empty and must be an array!');
+    } else {
+      value.forEach(singleImage => {
+        if (!singleImage.val || typeof singleImage.val != 'string') {
+          throw new Error('Product Images Are Not Valid');
+        } else if (
+          !singleImage.sequence ||
+          typeof singleImage.sequence != 'number'
+        ) {
+          throw new Error('Sequence Is Valid');
+        }
+      });
+    }
+  }),
   check('productName', 'productName is invalid')
     .isString()
     .isLength({ min: 1, max: 100 })
@@ -272,6 +314,7 @@ exports.editProduct = [
     .optional(),
   checkValidation(),
 ];
+
 exports.getProduct = [
   authentication(),
   check('productId').custom(value => {

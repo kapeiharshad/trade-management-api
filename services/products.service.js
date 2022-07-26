@@ -1,6 +1,7 @@
 const logger = require('../helpers/logger.helper');
 const Product = require('../models/products.model');
 const Category = require('../models/categories.model');
+const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
 const Util = require('../helpers/Util.helper');
 class ProductService {
@@ -61,7 +62,6 @@ class ProductService {
       if (createOutput && createOutput._id) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Product Created Sucessfully',
         };
       }
@@ -149,7 +149,6 @@ class ProductService {
       if (editOutput && editOutput._id) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Product Updated Successfully',
         };
       }
@@ -180,7 +179,6 @@ class ProductService {
       if (productOutput && productOutput._id) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Product Fetched Successfully',
           record: productOutput,
         };
@@ -198,6 +196,33 @@ class ProductService {
         success: false,
         statusCode: 500,
         msg: 'An Error Occured While Getting Product By Id',
+      };
+    }
+  }
+
+  static async getProduct({ query }) {
+    try {
+      const projection = {};
+      const paginationObj = new pagination();
+      const statusQuery = { productStatus: 'active' };
+      const docs = await paginationObj.generatePagination(
+        Product,
+        query,
+        projection,
+        statusQuery,
+      );
+      return {
+        success: true,
+        msg: 'Products fetched successfully.',
+        records: docs,
+      };
+    } catch (error) {
+      logger.error('From getProduct error', { errorMsg: error });
+
+      return {
+        success: false,
+        statusCode: 500,
+        msg: 'An error occured while fetching products',
       };
     }
   }
@@ -229,7 +254,6 @@ class ProductService {
       if (deletedData && deletedData.modifiedCount) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Product Deleted Successfully.',
         };
       }

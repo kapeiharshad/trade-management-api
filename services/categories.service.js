@@ -31,7 +31,6 @@ class CategoryService {
       if (createOutput && createOutput._id) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Category Created Sucessfully',
         };
       }
@@ -78,7 +77,6 @@ class CategoryService {
       if (editOutput && editOutput._id) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Category Updated Successfully',
         };
       }
@@ -108,7 +106,6 @@ class CategoryService {
       if (categoryOutput && categoryOutput._id) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Categories Fetched Successfully',
           record: categoryOutput,
         };
@@ -135,17 +132,16 @@ class CategoryService {
       const projection = {
         categoryName: 1,
       };
-
       const paginationObj = new pagination();
-
+      const statusQuery = { categoryStatus: 'active' };
       const docs = await paginationObj.generatePagination(
         Category,
         query,
         projection,
+        statusQuery,
       );
       return {
         success: true,
-        statusCode: 200,
         msg: 'Categories fetched successfully.',
         records: docs,
       };
@@ -187,7 +183,6 @@ class CategoryService {
       if (deletedData && deletedData.modifiedCount) {
         return {
           success: true,
-          statusCode: 200,
           msg: 'Category Deleted Successfully.',
         };
       }
