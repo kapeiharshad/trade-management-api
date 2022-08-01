@@ -1,7 +1,7 @@
 const logger = require('./logger.helper');
 
 class Pagination {
-  async generatePagination(model, queryParams, project = {}, statusQuery) {
+  async generatePagination(model, queryParams, statusQuery, project = {}) {
     try {
       const paginationQueryObj = await Pagination.createPaginationQuery(
         queryParams,

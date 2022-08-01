@@ -2,7 +2,7 @@ const logger = require('../helpers/logger.helper');
 const Category = require('../models/categories.model');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
-const Util = require('../helpers/Util.helper');
+const Util = require('../helpers/util.helper');
 class CategoryService {
   static async createCategory({ body }) {
     try {
@@ -14,7 +14,7 @@ class CategoryService {
         saveObj.categoryStatus = body.categoryStatus;
       }
 
-      const uniqueId = await Util.generateNanoId();
+      const uniqueId = await Util.generateUUID();
 
       if (!uniqueId) {
         return {
@@ -53,7 +53,7 @@ class CategoryService {
 
   static async editCategory({ body, params }) {
     try {
-      let oneCategory = await Category.findOne(
+      const oneCategory = await Category.findOne(
         {
           _id: mongoose.Types.ObjectId(params.categoryId),
         },
@@ -137,8 +137,8 @@ class CategoryService {
       const docs = await paginationObj.generatePagination(
         Category,
         query,
-        projection,
         statusQuery,
+        projection,
       );
       return {
         success: true,
@@ -158,7 +158,7 @@ class CategoryService {
 
   static async deleteCategory({ params }) {
     try {
-      let oneCategory = await Category.findOne(
+      const oneCategory = await Category.findOne(
         { _id: mongoose.Types.ObjectId(params.categoryId) },
         {
           _id: 1,

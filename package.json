@@ -44,11 +44,12 @@
     "supertest": "^6.2.3",
     "swagger-jsdoc": "^6.2.0",
     "swagger-ui-express": "^4.3.0",
+    "uuid": "^8.3.2",
     "winston": "^3.7.2"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^3.0.1",
-    "husky": "6",
+    "husky": "^7.0.4",
     "jest": "^28.1.0",
     "prettier": "^2.6.1"
   }

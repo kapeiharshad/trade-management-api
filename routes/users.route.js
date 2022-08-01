@@ -179,7 +179,7 @@ router.post('/', addUser, async (req, res) => {
  *                   type: string
  *                   example: An error occurs.
  */
-router.patch('/:user Id', editUser, async (req, res) => {
+router.patch('/:userId', editUser, async (req, res) => {
   try {
     const result = await UserService.editUser({
       body: req.body,

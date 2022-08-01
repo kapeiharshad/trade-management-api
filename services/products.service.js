@@ -3,7 +3,7 @@ const Product = require('../models/products.model');
 const Category = require('../models/categories.model');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
-const Util = require('../helpers/Util.helper');
+const Util = require('../helpers/util.helper');
 class ProductService {
   static async createProduct({ body }) {
     try {
@@ -45,7 +45,7 @@ class ProductService {
 
       if (body.discount) saveObj.discount = body.discount;
 
-      const uniqueId = await Util.generateNanoId();
+      const uniqueId = await Util.generateUUID();
 
       if (!uniqueId) {
         return {
@@ -84,7 +84,7 @@ class ProductService {
 
   static async editProduct({ body, params }) {
     try {
-      let oneProduct = await Product.findOne(
+      const oneProduct = await Product.findOne(
         { _id: mongoose.Types.ObjectId(params.productId) },
         {
           _id: 1,
@@ -208,8 +208,8 @@ class ProductService {
       const docs = await paginationObj.generatePagination(
         Product,
         query,
-        projection,
         statusQuery,
+        projection,
       );
       return {
         success: true,
@@ -229,7 +229,7 @@ class ProductService {
 
   static async deleteProduct({ params }) {
     try {
-      let oneProduct = await Product.findOne(
+      const oneProduct = await Product.findOne(
         { _id: mongoose.Types.ObjectId(params.productId) },
         {
           _id: 1,

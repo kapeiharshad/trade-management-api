@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ProductService = require('../services/products.service');
-const Util = require('../helpers/Util.helper');
+const Util = require('../helpers/util.helper');
 const {
   createProduct,
   editProduct,

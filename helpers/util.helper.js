@@ -1,4 +1,4 @@
-const uniqueId = require('generate-unique-id');
+const { v4: uuidv4 } = require('uuid');
 class Util {
   static render(res, result) {
     if (!result.success) {
@@ -15,17 +15,8 @@ class Util {
 
     res.json(result);
   }
-  static generateNanoId(useLetter) {
-    let letterAllowed = false;
-
-    if (useLetter) {
-      letterAllowed = true;
-    }
-
-    return uniqueId({
-      length: 12,
-      useLetters: letterAllowed,
-    });
+  static generateUUID() {
+    return uuidv4();
   }
 }
 module.exports = Util;

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Util = require('../helpers/Util.helper');
+const Util = require('../helpers/util.helper');
 const CategoryService = require('../services/categories.service');
 const {
   createCategory,
