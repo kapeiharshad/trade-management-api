@@ -1,11 +1,12 @@
 const logger = require('./logger.helper');
 
 class Pagination {
-  async generatePagination(model, queryParams, project = {}) {
+  async generatePagination(model, queryParams, statusQuery, project = {}) {
     try {
       const paginationQueryObj = await Pagination.createPaginationQuery(
         queryParams,
         project,
+        statusQuery,
       );
       const countAggregateOptions = [
         {
@@ -43,13 +44,17 @@ class Pagination {
     }
   }
 
-  static async createPaginationQuery(queryParams, project) {
+  static async createPaginationQuery(queryParams, project, statusQuery) {
     const aggregateData = [];
     let page = 1;
     let limitNum = 0;
+    let status = { status: 'active' };
+    if (statusQuery) {
+      status = statusQuery;
+    }
     const match = {
       $match: {
-        $and: [{ status: 'active' }],
+        $and: [status],
       },
     };
     let limit = {};
@@ -113,10 +118,7 @@ class Pagination {
               });
             } else {
               match['$match'] = {
-                $and: [
-                  { [key]: new RegExp(queryParams[key], 'gi') },
-                  { status: 'active' },
-                ],
+                $and: [{ [key]: new RegExp(queryParams[key], 'gi') }, status],
               };
             }
             break;
