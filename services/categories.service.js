@@ -1,5 +1,5 @@
-const logger = require('../helpers/logger.helper');
 const Category = require('../models/categories.model');
+const logger = require('../helpers/logger.helper');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
 const Util = require('../helpers/util.helper');
@@ -32,6 +32,7 @@ class CategoryService {
         return {
           success: true,
           msg: 'Category Created Sucessfully',
+          id: createOutput._id,
         };
       }
 
@@ -62,9 +63,11 @@ class CategoryService {
         },
       );
 
-      const { _id, categoryStatus } = oneCategory;
-
-      if (!_id || categoryStatus != 'active')
+      if (
+        !oneCategory ||
+        !oneCategory._id ||
+        oneCategory.categoryStatus != 'active'
+      )
         return {
           success: false,
           statusCode: 404,
@@ -130,10 +133,13 @@ class CategoryService {
   static async getCategory({ query }) {
     try {
       const projection = {
-        categoryName: 1,
+        // categoryName: 1,
+        // categoryStatus: 1,
       };
       const paginationObj = new pagination();
-      const statusQuery = { categoryStatus: 'active' };
+      const statusQuery = {
+        categoryStatus: 'active',
+      };
       const docs = await paginationObj.generatePagination(
         Category,
         query,
@@ -166,9 +172,12 @@ class CategoryService {
         },
       );
 
-      const { _id, categoryStatus } = oneCategory;
-
-      if (!_id || !categoryStatus || categoryStatus != 'active')
+      if (
+        !oneCategory ||
+        !oneCategory._id ||
+        !oneCategory.categoryStatus ||
+        oneCategory.categoryStatus != 'active'
+      )
         return {
           success: false,
           statusCode: 404,

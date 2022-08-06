@@ -16,16 +16,14 @@ class ProductService {
         },
       );
 
-      const { _id, categoryStatus } = categoryOutput;
-
-      if (!_id)
+      if (!categoryOutput || !categoryOutput._id)
         return {
           success: false,
           statusCode: 400,
           msg: 'Category Does Not Exist,Cannot Create Product Of It',
         };
 
-      if (categoryStatus != 'active')
+      if (categoryOutput.categoryStatus != 'active')
         return {
           success: false,
           statusCode: 400,
@@ -63,6 +61,7 @@ class ProductService {
         return {
           success: true,
           msg: 'Product Created Sucessfully',
+          id: createOutput._id,
         };
       }
 
