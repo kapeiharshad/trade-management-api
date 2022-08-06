@@ -20,7 +20,7 @@ describe(`Category API's test cases`, function () {
     adminToken = response.body.token;
   });
 
-  it('Test case to create a category sucessfully', async function () {
+  it('Test case to create a category successfully', async function () {
     const categoryObj = {
       categoryName: 'nut bolt',
     };
@@ -31,7 +31,7 @@ describe(`Category API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('msg', 'Category Created Sucessfully');
+    expect(response.body).toHaveProperty('msg', 'Category Created Successfully');
     expect(response.body).toHaveProperty('id');
     categoryId = response.body.id;
   });
@@ -175,7 +175,7 @@ describe(`Category API's test cases`, function () {
       .get('/categories?limit=10&page=1')
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    console.log('response response 123', response.body);
+    console.log('response response 123', JSON.stringify(response.body.records.docs));
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty(
@@ -184,20 +184,20 @@ describe(`Category API's test cases`, function () {
     );
     expect(response.body).toHaveProperty('records');
     expect(response.body).toHaveProperty('records.docs');
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty(
       '_id',
-      '62e9adf4030a270999ca9448',
+      '62e9adf4030a270999ca9446',
     );
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty(
       'categoryName',
-      'engine',
+      'engin1e',
     );
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty(
       'categoryStatus',
       'active',
     );
     expect(response.body).toHaveProperty('records.limit', 10);
-    expect(response.body).toHaveProperty('records.total', 3);
+    expect(response.body).toHaveProperty('records.total', 2);
     expect(response.body).toHaveProperty('records.page', 1);
     expect(response.body).toHaveProperty('records.pages', 1);
   });

@@ -62,7 +62,7 @@ const {
  *                   example: true
  *                 msg:
  *                   type: string
- *                   example: Product Created Sucessfully.
+ *                   example: Product Created Successfully.
  *                 id:
  *                  type: string
  *                  example: 629e02d9ef765441783a3cc5

@@ -46,7 +46,7 @@ const {
  *                   example: true
  *                 msg:
  *                   type: string
- *                   example: Category Created Sucessfully.
+ *                   example: Category Created Successfully.
  *                 id:
  *                  type: string
  *                  example: 629e02d9ef765441783a3cc5

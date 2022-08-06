@@ -31,7 +31,7 @@ class CategoryService {
       if (createOutput && createOutput._id) {
         return {
           success: true,
-          msg: 'Category Created Sucessfully',
+          msg: 'Category Created Successfully',
           id: createOutput._id,
         };
       }

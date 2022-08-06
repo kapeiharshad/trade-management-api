@@ -60,7 +60,7 @@ class ProductService {
       if (createOutput && createOutput._id) {
         return {
           success: true,
-          msg: 'Product Created Sucessfully',
+          msg: 'Product Created Successfully',
           id: createOutput._id,
         };
       }
