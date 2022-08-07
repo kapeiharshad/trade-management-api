@@ -172,10 +172,9 @@ describe(`Category API's test cases`, function () {
 
   it('Test case to get all categories', async function () {
     const response = await request(app)
-      .get('/categories?limit=10&page=1')
+      .get('/categories?limit=10&page=1&sortDirection=desc')
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    console.log('response response 123', JSON.stringify(response.body.records.docs));
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty(
@@ -186,11 +185,11 @@ describe(`Category API's test cases`, function () {
     expect(response.body).toHaveProperty('records.docs');
     expect(response.body.records.docs[0]).toHaveProperty(
       '_id',
-      '62e9adf4030a270999ca9446',
+      '62e9adf4030a270999ca9448',
     );
     expect(response.body.records.docs[0]).toHaveProperty(
       'categoryName',
-      'engin1e',
+      'engine',
     );
     expect(response.body.records.docs[0]).toHaveProperty(
       'categoryStatus',

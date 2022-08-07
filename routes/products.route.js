@@ -379,7 +379,6 @@ router.get('/:productId', getProduct, async (req, res) => {
     }
 });
 
-
 /**
  * @swagger
  * /products/:

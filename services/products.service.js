@@ -91,9 +91,7 @@ class ProductService {
         },
       );
 
-      const { _id, productStatus } = oneProduct;
-
-      if (!_id || productStatus != 'active')
+      if (!oneProduct || !oneProduct._id || oneProduct.productStatus != 'active')
         return {
           success: false,
           statusCode: 400,

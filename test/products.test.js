@@ -2,7 +2,7 @@ const app = require('../app');
 const request = require('supertest');
 const { setupDB } = require('./test-config/testSetup');
 setupDB(true);
-describe(`Category API's test cases`, function () {
+describe(`Product API's test cases`, function () {
 
   let adminToken = '',
     productId = '';
@@ -41,7 +41,6 @@ describe(`Category API's test cases`, function () {
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    console.log('response ', response.body);
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('msg', 'Product Created Successfully');
@@ -68,7 +67,6 @@ describe(`Category API's test cases`, function () {
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    console.log('response ', response.body);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('msg', 'Category Does Not Exist,Cannot Create Product Of It');
@@ -93,10 +91,57 @@ describe(`Category API's test cases`, function () {
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    console.log('response ', response.body);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('msg', 'Category Does Not Exist,Cannot Create Product Of It');
+  });
+
+  it('Test case to update a product successfully', async function () {
+    const productObj = {
+      categoryId: '62e9adf4030a270999ca9448',
+      productName: 'mrf tyre',
+      actualAmount: 10,
+      productImage: [
+        {
+          val: '12',
+          sequence: 123,
+        },
+      ],
+      specification: 'one of the best tyre in 2022',
+      discount: 0,
+    };
+    const response = await request(app)
+      .patch(`/products/62dbfaf07e7ccb28caf17d95`)
+      .send(productObj)
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + adminToken);
+    expect(response.status).toEqual(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('msg', 'Product Updated Successfully');
+  });
+
+  it('Test case to pass inactive categoryId while editing a product', async function () {
+    const productObj = {
+      categoryId: '62e9adf4030a270999ca9447',
+      productName: 'mrf tyre',
+      actualAmount: 1000,
+      productImage: [
+        {
+          val: '12',
+          sequence: 123,
+        },
+      ],
+      specification: 'one of the best tyre in 2022',
+      discount: 0,
+    };
+    const response = await request(app)
+      .patch('/products/62dbfaf07e7ccb28caf17d95')
+      .send(productObj)
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + adminToken);
+    expect(response.status).toEqual(400);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('msg', 'Category Does Not Exist,Cannot Edit Product Of It');
   });
 
   it('Test case to get product by ID', async function () {
@@ -149,5 +194,33 @@ describe(`Category API's test cases`, function () {
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('msg', `Product Deleted Successfully.`);
+  });
+
+  it('Test case to get all products', async function () {
+    const response = await request(app)
+      .get(`/products?limit=10&page=1&sortDirection=desc`)
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + adminToken);
+    expect(response.status).toEqual(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('msg', `Products fetched successfully.`);
+    expect(response.body).toHaveProperty('records');
+    expect(response.body).toHaveProperty('records.docs');
+    expect(response.body.records.docs[1]).toHaveProperty('_id', "62dbfaf07e7ccb28caf17d95");
+
+    expect(response.body.records.docs[1]).toHaveProperty('categoryId', '62e9adf4030a270999ca9448');
+    expect(response.body.records.docs[1]).toHaveProperty('productName', 'mrf tyre');
+    expect(response.body.records.docs[1]).toHaveProperty('actualAmount', 10);
+    expect(response.body.records.docs[1]).toHaveProperty('specification', 'one of the best tyre in 2022');
+    expect(response.body.records.docs[1]).toHaveProperty(
+      'discount',
+      0,
+    );
+    expect(response.body.records.docs[1]).toHaveProperty('productImage', [{ "sequence": "123", "val": "12" }]);
+    expect(response.body.records.docs[1]).toHaveProperty('productStatus', 'active');
+    expect(response.body).toHaveProperty('records.limit', 10);
+    expect(response.body).toHaveProperty('records.total', 3);
+    expect(response.body).toHaveProperty('records.page', 1);
+    expect(response.body).toHaveProperty('records.pages', 1);
   });
 });
