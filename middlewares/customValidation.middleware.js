@@ -39,9 +39,9 @@ module.exports.checkValidation = function (modes) {
   return async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const msgString = `${errors.array()[0].msg} of '${
-        errors.array()[0].param
-      }' at ${errors.array()[0].location} location.`;
+      const msgString = `${errors.array()[0].msg} at ${
+        errors.array()[0].location
+      } location.`;
       return res
         .status(400)
         .json({ success: false, msg: msgString, errors: errors.array() });
@@ -149,7 +149,7 @@ module.exports.checkDuplicates = function (model, keys) {
           res,
           manyMode,
           next,
-          `${key} is duplicate of '${key}' at body location.`,
+          `${key} is duplicate at body location.`,
           400,
           error,
         );

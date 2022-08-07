@@ -3,7 +3,6 @@ const request = require('supertest');
 const { setupDB } = require('./test-config/testSetup');
 setupDB(true);
 describe(`Product API's test cases`, function () {
-
   let adminToken = '',
     productId = '';
 
@@ -69,7 +68,10 @@ describe(`Product API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', 'Category Does Not Exist,Cannot Create Product Of It');
+    expect(response.body).toHaveProperty(
+      'msg',
+      'Category Does Not Exist,Cannot Create Product Of It',
+    );
   });
 
   it('Test case to pass inactive categoryId while creating a product', async function () {
@@ -93,7 +95,10 @@ describe(`Product API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', 'Category Does Not Exist,Cannot Create Product Of It');
+    expect(response.body).toHaveProperty(
+      'msg',
+      'Category Does Not Exist,Cannot Create Product Of It',
+    );
   });
 
   it('Test case to update a product successfully', async function () {
@@ -141,7 +146,10 @@ describe(`Product API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', 'Category Does Not Exist,Cannot Edit Product Of It');
+    expect(response.body).toHaveProperty(
+      'msg',
+      'Category Does Not Exist,Cannot Edit Product Of It',
+    );
   });
 
   it('Test case to get product by ID', async function () {
@@ -154,15 +162,20 @@ describe(`Product API's test cases`, function () {
     expect(response.body).toHaveProperty('msg', `Product Fetched Successfully`);
     expect(response.body).toHaveProperty('record');
     expect(response.body.record).toHaveProperty('_id', productId);
-    expect(response.body.record).toHaveProperty('categoryId', '62e9adf4030a270999ca9448');
+    expect(response.body.record).toHaveProperty(
+      'categoryId',
+      '62e9adf4030a270999ca9448',
+    );
     expect(response.body.record).toHaveProperty('productName', 'mrf tyre');
     expect(response.body.record).toHaveProperty('actualAmount', 1000);
-    expect(response.body.record).toHaveProperty('specification', 'one of the best tyre in 2022');
     expect(response.body.record).toHaveProperty(
-      'discount',
-      0,
+      'specification',
+      'one of the best tyre in 2022',
     );
-    expect(response.body.record).toHaveProperty('productImage', [{ "sequence": "123", "val": "12" }]);
+    expect(response.body.record).toHaveProperty('discount', 0);
+    expect(response.body.record).toHaveProperty('productImage', [
+      { sequence: '123', val: '12' },
+    ]);
     expect(response.body.record).toHaveProperty('productStatus', 'active');
   });
 
@@ -183,7 +196,10 @@ describe(`Product API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', `Invalid objectId of 'productId' at params location.`);
+    expect(response.body).toHaveProperty(
+      'msg',
+      `Invalid objectId of 'productId' at params location.`,
+    );
   });
 
   it('Test case to delete product by ID', async function () {
@@ -193,7 +209,10 @@ describe(`Product API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('msg', `Product Deleted Successfully.`);
+    expect(response.body).toHaveProperty(
+      'msg',
+      `Product Deleted Successfully.`,
+    );
   });
 
   it('Test case to get all products', async function () {
@@ -203,21 +222,38 @@ describe(`Product API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('msg', `Products fetched successfully.`);
+    expect(response.body).toHaveProperty(
+      'msg',
+      `Products fetched successfully.`,
+    );
     expect(response.body).toHaveProperty('records');
     expect(response.body).toHaveProperty('records.docs');
-    expect(response.body.records.docs[1]).toHaveProperty('_id', "62dbfaf07e7ccb28caf17d95");
-
-    expect(response.body.records.docs[1]).toHaveProperty('categoryId', '62e9adf4030a270999ca9448');
-    expect(response.body.records.docs[1]).toHaveProperty('productName', 'mrf tyre');
-    expect(response.body.records.docs[1]).toHaveProperty('actualAmount', 10);
-    expect(response.body.records.docs[1]).toHaveProperty('specification', 'one of the best tyre in 2022');
     expect(response.body.records.docs[1]).toHaveProperty(
-      'discount',
-      0,
+      '_id',
+      '62dbfaf07e7ccb28caf17d95',
     );
-    expect(response.body.records.docs[1]).toHaveProperty('productImage', [{ "sequence": "123", "val": "12" }]);
-    expect(response.body.records.docs[1]).toHaveProperty('productStatus', 'active');
+
+    expect(response.body.records.docs[1]).toHaveProperty(
+      'categoryId',
+      '62e9adf4030a270999ca9448',
+    );
+    expect(response.body.records.docs[1]).toHaveProperty(
+      'productName',
+      'mrf tyre',
+    );
+    expect(response.body.records.docs[1]).toHaveProperty('actualAmount', 10);
+    expect(response.body.records.docs[1]).toHaveProperty(
+      'specification',
+      'one of the best tyre in 2022',
+    );
+    expect(response.body.records.docs[1]).toHaveProperty('discount', 0);
+    expect(response.body.records.docs[1]).toHaveProperty('productImage', [
+      { sequence: '123', val: '12' },
+    ]);
+    expect(response.body.records.docs[1]).toHaveProperty(
+      'productStatus',
+      'active',
+    );
     expect(response.body).toHaveProperty('records.limit', 10);
     expect(response.body).toHaveProperty('records.total', 3);
     expect(response.body).toHaveProperty('records.page', 1);

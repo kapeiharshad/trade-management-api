@@ -31,7 +31,10 @@ describe(`Category API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('msg', 'Category Created Successfully');
+    expect(response.body).toHaveProperty(
+      'msg',
+      'Category Created Successfully',
+    );
     expect(response.body).toHaveProperty('id');
     categoryId = response.body.id;
   });
