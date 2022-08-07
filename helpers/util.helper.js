@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 class Util {
   static render(res, result) {
     if (!result.success) {
@@ -13,6 +14,9 @@ class Util {
     }
 
     res.json(result);
+  }
+  static generateUUID() {
+    return uuidv4();
   }
 }
 module.exports = Util;

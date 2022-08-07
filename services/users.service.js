@@ -116,10 +116,14 @@ class UserService {
         // firstName: 1,
         // lastName: 1,
       };
+      const statusQuery = {
+        status: 'active',
+      };
       const paginationObj = new pagination();
       const docs = await paginationObj.generatePagination(
         User,
         query,
+        statusQuery,
         projection,
       );
       return {
