@@ -1,8 +1,9 @@
-const Category = require('../models/categories.model');
+const Category = require('../models/category.model');
 const logger = require('../helpers/logger.helper');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
 const Util = require('../helpers/util.helper');
+const errorName = require('../constants/messages.constant').ERROR_NAME
 class CategoryService {
   static async createCategory({ body }) {
     try {
@@ -20,7 +21,8 @@ class CategoryService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Failed To Generate Unique CategoryId',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Failed To Generate Unique CategoryId',
         };
       }
 
@@ -39,7 +41,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 400,
-        msg: 'Failed To Add Category',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Add Category',
       };
     } catch (error) {
       logger.error('From create category error', { errorMsg: error });
@@ -47,7 +50,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Creating Category',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Creating Category',
       };
     }
   }
@@ -70,8 +74,9 @@ class CategoryService {
       )
         return {
           success: false,
-          statusCode: 404,
-          msg: 'Category Not Found',
+          statusCode: 400,
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Category Not Found',
         };
 
       if (body.categoryName) oneCategory.categoryName = body.categoryName;
@@ -87,7 +92,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 400,
-        msg: 'Failed To Update Category',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Update Category',
       };
     } catch (error) {
       logger.error('From edit category error', { errorMsg: error });
@@ -95,7 +101,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Editing Category',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Editing Category',
       };
     }
   }
@@ -116,8 +123,9 @@ class CategoryService {
 
       return {
         success: false,
-        statusCode: 404,
-        msg: 'Category Not Found',
+        statusCode: 400,
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Category Not Found',
       };
     } catch (error) {
       logger.error('From get category error', { errorMsg: error });
@@ -125,7 +133,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Getting Category By Id',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Getting Category By Id',
       };
     }
   }
@@ -157,7 +166,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while fetching all categories',
       };
     }
   }
@@ -180,8 +190,9 @@ class CategoryService {
       )
         return {
           success: false,
-          statusCode: 404,
-          msg: 'Category Not Found',
+          statusCode: 400,
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Category Not Found',
         };
 
       const deletedData = await Category.updateOne(
@@ -199,7 +210,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 400,
-        msg: 'Failed To Delete Category',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Delete Category',
       };
     } catch (error) {
       logger.error('From deleteCategory error', { errorMsg: error });
@@ -207,7 +219,8 @@ class CategoryService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Deleting Category',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Deleting Category',
       };
     }
   }

@@ -36,7 +36,7 @@ describe(`Product API's test cases`, function () {
       discount: 0,
     };
     const response = await request(app)
-      .post('/products/')
+      .post('/product/')
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
@@ -62,14 +62,14 @@ describe(`Product API's test cases`, function () {
       discount: 0,
     };
     const response = await request(app)
-      .post('/products/')
+      .post('/product/')
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
-      'msg',
+      'errors[0].msg',
       'Category Does Not Exist,Cannot Create Product Of It',
     );
   });
@@ -89,14 +89,14 @@ describe(`Product API's test cases`, function () {
       discount: 0,
     };
     const response = await request(app)
-      .post('/products/')
+      .post('/product/')
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
-      'msg',
+      'errors[0].msg',
       'Category Does Not Exist,Cannot Create Product Of It',
     );
   });
@@ -116,7 +116,7 @@ describe(`Product API's test cases`, function () {
       discount: 0,
     };
     const response = await request(app)
-      .patch(`/products/62dbfaf07e7ccb28caf17d95`)
+      .patch(`/product/62dbfaf07e7ccb28caf17d95`)
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
@@ -140,21 +140,21 @@ describe(`Product API's test cases`, function () {
       discount: 0,
     };
     const response = await request(app)
-      .patch('/products/62dbfaf07e7ccb28caf17d95')
+      .patch('/product/62dbfaf07e7ccb28caf17d95')
       .send(productObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
-      'msg',
+      'errors[0].msg',
       'Category Does Not Exist,Cannot Edit Product Of It',
     );
   });
 
   it('Test case to get product by ID', async function () {
     const response = await request(app)
-      .get(`/products/${productId}`)
+      .get(`/product/${productId}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
@@ -181,30 +181,30 @@ describe(`Product API's test cases`, function () {
 
   it('Should get error of product not found whlie passing invalid productId for getting a product by id', async function () {
     const response = await request(app)
-      .get(`/products/62e9adf4030a270999ca9448`)
+      .get(`/product/62e9adf4030a270999ca9448`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    expect(response.status).toEqual(404);
+    expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', `Product Not Found`);
+    expect(response.body).toHaveProperty('errors[0].msg', `Product Not Found`);
   });
 
   it('Test case to delete product by invalid ID', async function () {
     const response = await request(app)
-      .delete(`/products/jnbvkjbvkrbkvverbvv`)
+      .delete(`/product/jnbvkjbvkrbkvverbvv`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
-      'msg',
-      `Invalid objectId of 'productId' at params location.`,
+      'errorMsg[0].msg',
+      `Invalid objectId`,
     );
   });
 
   it('Test case to delete product by ID', async function () {
     const response = await request(app)
-      .delete(`/products/${productId}`)
+      .delete(`/product/${productId}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
@@ -217,7 +217,7 @@ describe(`Product API's test cases`, function () {
 
   it('Test case to get all products', async function () {
     const response = await request(app)
-      .get(`/products?limit=10&page=1&sortDirection=desc`)
+      .get(`/product?limit=10&page=1&sortDirection=asc&sortKey=_id`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
@@ -228,29 +228,29 @@ describe(`Product API's test cases`, function () {
     );
     expect(response.body).toHaveProperty('records');
     expect(response.body).toHaveProperty('records.docs');
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty(
       '_id',
       '62dbfaf07e7ccb28caf17d95',
     );
 
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty(
       'categoryId',
       '62e9adf4030a270999ca9448',
     );
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty(
       'productName',
       'mrf tyre',
     );
-    expect(response.body.records.docs[1]).toHaveProperty('actualAmount', 10);
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty('actualAmount', 10);
+    expect(response.body.records.docs[0]).toHaveProperty(
       'specification',
       'one of the best tyre in 2022',
     );
-    expect(response.body.records.docs[1]).toHaveProperty('discount', 0);
-    expect(response.body.records.docs[1]).toHaveProperty('productImage', [
+    expect(response.body.records.docs[0]).toHaveProperty('discount', 0);
+    expect(response.body.records.docs[0]).toHaveProperty('productImage', [
       { sequence: '123', val: '12' },
     ]);
-    expect(response.body.records.docs[1]).toHaveProperty(
+    expect(response.body.records.docs[0]).toHaveProperty(
       'productStatus',
       'active',
     );

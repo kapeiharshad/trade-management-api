@@ -1,9 +1,10 @@
 const logger = require('../helpers/logger.helper');
-const Product = require('../models/products.model');
-const Category = require('../models/categories.model');
+const Product = require('../models/product.model');
+const Category = require('../models/category.model');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
 const Util = require('../helpers/util.helper');
+const errorName = require('../constants/messages.constant').ERROR_NAME
 class ProductService {
   static async createProduct({ body }) {
     try {
@@ -20,14 +21,16 @@ class ProductService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Category Does Not Exist,Cannot Create Product Of It',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Category Does Not Exist,Cannot Create Product Of It',
         };
 
       if (categoryOutput.categoryStatus != 'active')
         return {
           success: false,
           statusCode: 400,
-          msg: 'Category Is Not Active To Create New Product',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Category Is Not Active To Create New Product',
         };
 
       const saveObj = {
@@ -49,7 +52,8 @@ class ProductService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Failed To Generate Unique ProductId',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Failed To Generate Unique ProductId',
         };
       }
 
@@ -68,7 +72,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 400,
-        msg: 'Failed To Add Product',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Add Product',
       };
     } catch (error) {
       logger.error('From create product error', { errorMsg: error });
@@ -76,7 +81,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Creating Product',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Creating Product',
       };
     }
   }
@@ -99,7 +105,8 @@ class ProductService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Product Not Found',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Product Not Found',
         };
 
       if (body.productName) {
@@ -138,7 +145,8 @@ class ProductService {
           return {
             success: false,
             statusCode: 400,
-            msg: 'Category Does Not Exist,Cannot Edit Product Of It',
+            errorName: errorName.__FAILED_EXECUTION,
+            errorMsg: 'Category Does Not Exist,Cannot Edit Product Of It',
           };
         }
 
@@ -157,7 +165,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 400,
-        msg: 'Failed To Update Product',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Update Product',
       };
     } catch (error) {
       logger.error('From edit product error', { errorMsg: error });
@@ -165,7 +174,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Editing Product',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Editing Product',
       };
     }
   }
@@ -187,8 +197,9 @@ class ProductService {
 
       return {
         success: false,
-        statusCode: 404,
-        msg: 'Product Not Found',
+        statusCode: 400,
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Product Not Found',
       };
     } catch (error) {
       logger.error('From get Product error', { errorMsg: error });
@@ -196,7 +207,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Getting Product By Id',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Getting Product By Id',
       };
     }
   }
@@ -223,7 +235,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occured while fetching products',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while fetching products',
       };
     }
   }
@@ -244,7 +257,8 @@ class ProductService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Product Not Found',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Product Not Found',
         };
 
       const deletedData = await Product.updateOne(
@@ -262,7 +276,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 400,
-        msg: 'Failed To Delete Product',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Delete Product',
       };
     } catch (error) {
       logger.error('From deleteProduct error', { errorMsg: error });
@@ -270,7 +285,8 @@ class ProductService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Deleting Product',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Deleting Product',
       };
     }
   }

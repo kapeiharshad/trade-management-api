@@ -4,6 +4,7 @@ const Util = require('../helpers/util.helper');
 const JWT = require('../helpers/jwt.helper');
 const UserToken = require('../models/userToken.model');
 const mongoose = require('mongoose');
+const errorName = require('../constants/messages.constant').ERROR_NAME
 
 async function generateResult(
   ret,
@@ -23,13 +24,13 @@ async function generateResult(
   } else if (!manyMode) {
     const msgError =
       !error || !error.length
-        ? { success: false, statusCode: statusCode, msg: message }
+        ? { success: false, statusCode: statusCode, errorName: errorName.__UNAUTHENTICATED_USER, errorMsg: message }
         : {
-            success: false,
-            statusCode: statusCode,
-            msg: message,
-            errors: error,
-          };
+          success: false,
+          statusCode: statusCode,
+          errorName: errorName.__VALIDATION_ERROR,
+          errorMsg: error
+        };
     Util.render(res, msgError);
   }
   return false;
@@ -39,12 +40,11 @@ module.exports.checkValidation = function (modes) {
   return async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const msgString = `${errors.array()[0].msg} at ${
-        errors.array()[0].location
-      } location.`;
+      const msgString = `${errors.array()[0].msg} at ${errors.array()[0].location
+        } location.`;
       return res
         .status(400)
-        .json({ success: false, msg: msgString, errors: errors.array() });
+        .json({ success: false, errorName: errorName.__VALIDATION_ERROR, errorMsg: errors.array() });
     } else {
       next();
     }

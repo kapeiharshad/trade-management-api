@@ -5,7 +5,7 @@ const {
   authentication,
   checkDuplicates,
 } = require('./middlewares/customValidation.middleware');
-const User = require('./models/users.model');
+const User = require('./models/user.model');
 
 exports.addUser = [
   authentication(),

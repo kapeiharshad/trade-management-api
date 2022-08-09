@@ -34,7 +34,7 @@ describe(`User API's test cases`, function () {
       status: 'active',
     };
     const response = await request(app)
-      .post('/users/')
+      .post('/user/')
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
@@ -58,17 +58,18 @@ describe(`User API's test cases`, function () {
       status: 'active',
     };
     const response = await request(app)
-      .post('/users/')
+      .post('/user/')
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errorMsg');
     expect(response.body).toHaveProperty(
-      'msg',
-      `email is invalid of 'email' at body location.`,
+      'errorMsg[0].msg',
+      `email is invalid`,
     );
-    expect(response.body).toHaveProperty('errors');
+
   });
 
   it('Should get error of invalid contact no whlie create a user sucessfully', async function () {
@@ -84,17 +85,17 @@ describe(`User API's test cases`, function () {
       status: 'active',
     };
     const response = await request(app)
-      .post('/users/')
+      .post('/user/')
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errorMsg');
     expect(response.body).toHaveProperty(
-      'msg',
-      `length should be 10 characters of 'contact' at body location.`,
+      'errorMsg[0].msg',
+      `length should be 10 characters`,
     );
-    expect(response.body).toHaveProperty('errors');
   });
 
   it('Should get error of required userName whlie create a user sucessfully', async function () {
@@ -108,17 +109,17 @@ describe(`User API's test cases`, function () {
       status: 'active',
     };
     const response = await request(app)
-      .post('/users/')
+      .post('/user/')
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errorMsg');
     expect(response.body).toHaveProperty(
-      'msg',
-      `userName is invalid of 'userName' at body location.`,
+      'errorMsg[0].msg',
+      `userName is invalid`,
     );
-    expect(response.body).toHaveProperty('errors');
   });
 
   it('Should get error of required contact whlie create a user sucessfully', async function () {
@@ -132,45 +133,18 @@ describe(`User API's test cases`, function () {
       status: 'active',
     };
     const response = await request(app)
-      .post('/users/')
+      .post('/user/')
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errorMsg');
     expect(response.body).toHaveProperty(
-      'msg',
-      `contact is invalid of 'contact' at body location.`,
+      'errorMsg[0].msg',
+      `contact is invalid`,
     );
-    expect(response.body).toHaveProperty('errors');
   });
-
-  it('Should get error of required contact whlie create a user sucessfully', async function () {
-    const userObj = {
-      userName: 'kailash9826',
-      firstName: 'kailash kumar',
-      lastName: 'Yadav',
-      email: 'kailash9826@yopmail.com',
-      password: '1234567890',
-      userType: 'user',
-      status: 'active',
-    };
-    const response = await request(app)
-      .post('/users/')
-      .send(userObj)
-      .set('Accept', 'application/json')
-      .set('Authorization', 'Bearer ' + adminToken);
-    expect(response.status).toEqual(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty(
-      'msg',
-      `contact is invalid of 'contact' at body location.`,
-    );
-    expect(response.body).toHaveProperty('errors');
-  });
-
-  // it('Duplicate email error',async function(){})
-  // it('Duplicate contact error',async function(){})
 
   it('Test case to edit user successfully', async function () {
     const userObj = {
@@ -178,7 +152,7 @@ describe(`User API's test cases`, function () {
       email: 'kailash111@yopmail.com',
     };
     const response = await request(app)
-      .patch(`/users/${userId}`)
+      .patch(`/user/${userId}`)
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
@@ -192,15 +166,15 @@ describe(`User API's test cases`, function () {
       userName: '',
     };
     const response = await request(app)
-      .patch(`/users/${userId}`)
+      .patch(`/user/${userId}`)
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
-      'msg',
-      `length should be between 1 to 100 characters of 'userName' at body location.`,
+      'errorMsg[0].msg',
+      `length should be between 1 to 100 characters`,
     );
   });
 
@@ -209,15 +183,15 @@ describe(`User API's test cases`, function () {
       email: 'kaisl@ vfk.in',
     };
     const response = await request(app)
-      .patch(`/users/${userId}`)
+      .patch(`/user/${userId}`)
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
-      'msg',
-      `email is invalid of 'email' at body location.`,
+      'errorMsg[0].msg',
+      `email is invalid`,
     );
   });
 
@@ -226,21 +200,21 @@ describe(`User API's test cases`, function () {
       contact: '+62360',
     };
     const response = await request(app)
-      .patch(`/users/${userId}`)
+      .patch(`/user/${userId}`)
       .send(userObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty(
-      'msg',
-      `length should be 10 characters of 'contact' at body location.`,
+      'errorMsg[0].msg',
+      `length should be 10 characters`,
     );
   });
 
   it('Test case to get all users', async function () {
     const response = await request(app)
-      .get(`/users?limit=10&page=1`)
+      .get(`/user?limit=10&page=1`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
@@ -277,7 +251,7 @@ describe(`User API's test cases`, function () {
 
   it('Test case to get user by ID', async function () {
     const response = await request(app)
-      .get(`/users/${userId}`)
+      .get(`/user/${userId}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
@@ -300,7 +274,7 @@ describe(`User API's test cases`, function () {
 
   it('Test case to delete user by ID', async function () {
     const response = await request(app)
-      .delete(`/users/${userId}`)
+      .delete(`/user/${userId}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
