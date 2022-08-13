@@ -91,7 +91,11 @@ class ProductService {
         },
       );
 
-      if (!oneProduct || !oneProduct._id || oneProduct.productStatus != 'active')
+      if (
+        !oneProduct ||
+        !oneProduct._id ||
+        oneProduct.productStatus != 'active'
+      )
         return {
           success: false,
           statusCode: 400,

@@ -326,3 +326,4 @@ exports.getProduct = [
   }),
   checkValidation(),
 ];
+exports.addToCart = [authentication()];

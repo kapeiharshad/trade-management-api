@@ -168,8 +168,7 @@ class AuthService {
           });
           return {
             success: true,
-            msg:
-              'The reset password link has been sent to your email address successfully',
+            msg: 'The reset password link has been sent to your email address successfully',
           };
         } else {
           throw new Error('Error while saving user token');
