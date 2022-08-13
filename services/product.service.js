@@ -4,7 +4,7 @@ const Category = require('../models/category.model');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
 const Util = require('../helpers/util.helper');
-const errorName = require('../constants/messages.constant').ERROR_NAME
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 class ProductService {
   static async createProduct({ body }) {
     try {

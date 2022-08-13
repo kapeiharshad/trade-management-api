@@ -11,7 +11,7 @@ const moment = require('moment');
 const crypto = require('crypto');
 const Mustache = require('mustache');
 const path = require('path');
-const errorName = require('../constants/messages.constant').ERROR_NAME
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 
 class AuthService {
   static async login(email, password) {

@@ -196,10 +196,7 @@ describe(`Product API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty(
-      'errorMsg[0].msg',
-      `Invalid objectId`,
-    );
+    expect(response.body).toHaveProperty('errorMsg[0].msg', `Invalid objectId`);
   });
 
   it('Test case to delete product by ID', async function () {

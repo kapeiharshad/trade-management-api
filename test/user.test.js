@@ -65,11 +65,7 @@ describe(`User API's test cases`, function () {
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('errorMsg');
-    expect(response.body).toHaveProperty(
-      'errorMsg[0].msg',
-      `email is invalid`,
-    );
-
+    expect(response.body).toHaveProperty('errorMsg[0].msg', `email is invalid`);
   });
 
   it('Should get error of invalid contact no whlie create a user sucessfully', async function () {
@@ -189,10 +185,7 @@ describe(`User API's test cases`, function () {
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty(
-      'errorMsg[0].msg',
-      `email is invalid`,
-    );
+    expect(response.body).toHaveProperty('errorMsg[0].msg', `email is invalid`);
   });
 
   it('Should get error if contact is invalid while editing user', async function () {

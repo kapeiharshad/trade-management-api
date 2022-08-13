@@ -3,7 +3,7 @@ const logger = require('../helpers/logger.helper');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
 const Util = require('../helpers/util.helper');
-const errorName = require('../constants/messages.constant').ERROR_NAME
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 class CategoryService {
   static async createCategory({ body }) {
     try {

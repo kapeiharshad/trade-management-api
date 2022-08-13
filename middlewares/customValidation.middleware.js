@@ -4,7 +4,7 @@ const Util = require('../helpers/util.helper');
 const JWT = require('../helpers/jwt.helper');
 const UserToken = require('../models/userToken.model');
 const mongoose = require('mongoose');
-const errorName = require('../constants/messages.constant').ERROR_NAME
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 
 async function generateResult(
   ret,
@@ -24,13 +24,18 @@ async function generateResult(
   } else if (!manyMode) {
     const msgError =
       !error || !error.length
-        ? { success: false, statusCode: statusCode, errorName: errorName.__UNAUTHENTICATED_USER, errorMsg: message }
+        ? {
+            success: false,
+            statusCode: statusCode,
+            errorName: errorName.__INTERNAL_SERVER_ERROR,
+            errorMsg: message,
+          }
         : {
-          success: false,
-          statusCode: statusCode,
-          errorName: errorName.__VALIDATION_ERROR,
-          errorMsg: error
-        };
+            success: false,
+            statusCode: statusCode,
+            errorName: errorName.__VALIDATION_ERROR,
+            errorMsg: error,
+          };
     Util.render(res, msgError);
   }
   return false;
@@ -40,11 +45,13 @@ module.exports.checkValidation = function (modes) {
   return async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const msgString = `${errors.array()[0].msg} at ${errors.array()[0].location
-        } location.`;
       return res
         .status(400)
-        .json({ success: false, errorName: errorName.__VALIDATION_ERROR, errorMsg: errors.array() });
+        .json({
+          success: false,
+          errorName: errorName.__VALIDATION_ERROR,
+          errorMsg: errors.array(),
+        });
     } else {
       next();
     }
@@ -55,6 +62,12 @@ module.exports.authentication = function (modes) {
   return async function (req, res, next, manyMode = false) {
     try {
       const token = await JWT.getRequestToken(req);
+      const error = [
+        {
+          msg: `User not authenticated.`,
+          location: 'internal',
+        },
+      ];
       if (token) {
         const jwtData = await JWT.jwtVerify(req);
         if (jwtData) {
@@ -96,6 +109,7 @@ module.exports.authentication = function (modes) {
               next,
               'User not authenticated.',
               401,
+              error,
             );
           }
         }
@@ -107,6 +121,7 @@ module.exports.authentication = function (modes) {
           next,
           'User not authenticated.',
           401,
+          error,
         );
       }
     } catch (error) {
@@ -115,8 +130,8 @@ module.exports.authentication = function (modes) {
         res,
         manyMode,
         next,
-        'User not authenticated.',
-        401,
+        'An error occur while authenticating user.',
+        500,
       );
     }
   };
@@ -150,7 +165,7 @@ module.exports.checkDuplicates = function (model, keys) {
           manyMode,
           next,
           `${key} is duplicate at body location.`,
-          400,
+          409,
           error,
         );
       } else {
@@ -162,8 +177,8 @@ module.exports.checkDuplicates = function (model, keys) {
         res,
         manyMode,
         next,
-        'check duplicate error',
-        400,
+        'An error occurs while checking duplicate error',
+        500,
       );
     }
   };

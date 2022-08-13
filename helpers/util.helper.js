@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const errorName = require('../constants/messages.constant').ERROR_NAME
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 class Util {
   static render(res, result) {
     if (!result.success) {
@@ -8,17 +8,22 @@ class Util {
         delete result.statusCode;
       } else res.status(400);
 
-      if (result && result.errorMsg && result.errorName && result.errorName != errorName.__VALIDATION_ERROR) {
-        result["errors"] = [
+      if (
+        result &&
+        result.errorMsg &&
+        result.errorName &&
+        result.errorName != errorName.__VALIDATION_ERROR
+      ) {
+        result['errors'] = [
           {
             msg: result.errorMsg,
-            location: "internal"
-          }
-        ]
+            location: 'internal',
+          },
+        ];
       } else {
-        result["errors"] = result.errorMsg
+        result['errors'] = result.errorMsg;
       }
-      delete result.errorMsg
+      delete result.errorMsg;
     } else {
       if (result.statusCode) {
         res.status(result.statusCode);
