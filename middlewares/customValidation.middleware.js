@@ -45,13 +45,11 @@ module.exports.checkValidation = function (modes) {
   return async function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          errorName: errorName.__VALIDATION_ERROR,
-          errorMsg: errors.array(),
-        });
+      return res.status(400).json({
+        success: false,
+        errorName: errorName.__VALIDATION_ERROR,
+        errorMsg: errors.array(),
+      });
     } else {
       next();
     }
