@@ -1,8 +1,8 @@
-const User = require('../models/users.model');
+const User = require('../models/user.model');
 const UserToken = require('../models/userToken.model');
 const logger = require('../helpers/logger.helper');
 const Mailer = require('../helpers/mailer.helper');
-const EmailTemplate = require('../models/emailTemplate');
+const EmailTemplate = require('../models/emailTemplate.model');
 
 const mongoose = require('mongoose');
 const JWT = require('../helpers/jwt.helper');
@@ -11,6 +11,7 @@ const moment = require('moment');
 const crypto = require('crypto');
 const Mustache = require('mustache');
 const path = require('path');
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 
 class AuthService {
   static async login(email, password) {
@@ -20,7 +21,8 @@ class AuthService {
         return {
           success: false,
           statusCode: 401,
-          msg: 'Email or password is incorrect!',
+          errorName: errorName.__UNAUTHENTICATED_USER,
+          errorMsg: 'Email or password is incorrect!',
         };
       }
       const isPasswordSame = await bcrypt.compare(password, user.password);
@@ -56,14 +58,16 @@ class AuthService {
       return {
         success: false,
         statusCode: 401,
-        msg: 'Email or password is incorrect!',
+        errorName: errorName.__UNAUTHENTICATED_USER,
+        errorMsg: 'Email or password is incorrect!',
       };
     } catch (error) {
       logger.error('From login api error', { errorMsg: error });
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while logging in',
       };
     }
   }
@@ -93,14 +97,16 @@ class AuthService {
       return {
         success: false,
         statusCode: 400,
-        msg: "Entered password's didn't matched.",
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: "Entered password's didn't matched.",
       };
     } catch (error) {
       logger.error('From changePassword api error', { errorMsg: error });
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while changing password',
       };
     }
   }
@@ -178,7 +184,8 @@ class AuthService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'The Email is not registered with us',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'The Email is not registered with us',
         };
       }
     } catch (error) {
@@ -186,7 +193,8 @@ class AuthService {
       return {
         success: false,
         statusCode: 500,
-        msg: error,
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: error,
       };
     }
   }
@@ -206,7 +214,8 @@ class AuthService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Link verified unsuccessfully',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Link verified unsuccessfully',
         };
       }
     } catch (error) {
@@ -214,7 +223,8 @@ class AuthService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while verifying reset password user',
       };
     }
   }
@@ -247,7 +257,8 @@ class AuthService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Reset password unsuccessfully',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Reset password unsuccessfully',
         };
       }
     } catch (error) {
@@ -255,7 +266,8 @@ class AuthService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while reseting user password.',
       };
     }
   }
@@ -266,7 +278,8 @@ class AuthService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'Must contains token on request body or header',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Must contains token on request body or header',
         };
       }
       await UserToken.deleteMany({ token: headerToken });
@@ -282,7 +295,8 @@ class AuthService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while logging out user',
       };
     }
   }

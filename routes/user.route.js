@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Util = require('../helpers/util.helper');
-const UserService = require('../services/users.service');
+const UserService = require('../services/user.service');
 const {
   addUser,
   editUser,

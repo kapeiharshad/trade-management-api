@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const ProductService = require('../services/products.service');
+const ProductService = require('../services/product.service');
 const Util = require('../helpers/util.helper');
 const {
-    createProduct,
-    editProduct,
-    getProduct,
-    getUser,
+  createProduct,
+  editProduct,
+  getProduct,
+  getUser,
 } = require('../validation');
 
 /**
@@ -43,7 +43,7 @@ const {
  *                 example: one of the best tyre in 2022
  *               productImage:
  *                 type: array
- *                  items:{} 
+ *                  items:{}
  *                 example:
  *                         - - val: "https://s3.amazon.com/helmet1"
  *                             sequence: 1
@@ -122,17 +122,17 @@ const {
  *         - msg
  */
 router.post('/', createProduct, async (req, res) => {
-    try {
-        const result = await ProductService.createProduct({ body: req.body });
+  try {
+    const result = await ProductService.createProduct({ body: req.body });
 
-        if (result.error) {
-            return Util.render(res, { success: false, msg: result.error });
-        }
-
-        return Util.render(res, result);
-    } catch (error) {
-        return Util.render(res, { success: false, msg: error });
+    if (result.error) {
+      return Util.render(res, { success: false, msg: result.error });
     }
+
+    return Util.render(res, result);
+  } catch (error) {
+    return Util.render(res, { success: false, msg: error });
+  }
 });
 
 /**
@@ -178,7 +178,7 @@ router.post('/', createProduct, async (req, res) => {
  *                 example: active
  *               productImage:
  *                 type: array
- *                  items:{} 
+ *                  items:{}
  *                 example:
  *                         - - val: "https://s3.amazon.com/helmet1"
  *                             sequence: 1
@@ -252,20 +252,20 @@ router.post('/', createProduct, async (req, res) => {
  *         - msg
  */
 router.patch('/:productId', editProduct, async (req, res) => {
-    try {
-        const result = await ProductService.editProduct({
-            body: req.body,
-            params: req.params,
-        });
+  try {
+    const result = await ProductService.editProduct({
+      body: req.body,
+      params: req.params,
+    });
 
-        if (result.error) {
-            return Util.render(res, { success: false, msg: result.error });
-        }
-
-        return Util.render(res, result);
-    } catch (error) {
-        return Util.render(res, { success: false, msg: error });
+    if (result.error) {
+      return Util.render(res, { success: false, msg: result.error });
     }
+
+    return Util.render(res, result);
+  } catch (error) {
+    return Util.render(res, { success: false, msg: error });
+  }
 });
 
 /**
@@ -326,7 +326,7 @@ router.patch('/:productId', editProduct, async (req, res) => {
  *                            example: 629e02d9ef765441783a3cc5
  *                          productImage:
  *                            type: array
- *                             items:{} 
+ *                             items:{}
  *                            example:
  *                                   - - val: "https://s3.amazon.com/helmet1"
  *                                       sequence: 1
@@ -366,17 +366,17 @@ router.patch('/:productId', editProduct, async (req, res) => {
  *                   example: An Error Occured While Getting Product By Id
  */
 router.get('/:productId', getProduct, async (req, res) => {
-    try {
-        const result = await ProductService.getProductById({ params: req.params });
+  try {
+    const result = await ProductService.getProductById({ params: req.params });
 
-        if (result.error) {
-            return Util.render(res, { success: false, msg: result.error });
-        }
-
-        return Util.render(res, result);
-    } catch (error) {
-        return Util.render(res, { success: false, msg: error });
+    if (result.error) {
+      return Util.render(res, { success: false, msg: result.error });
     }
+
+    return Util.render(res, result);
+  } catch (error) {
+    return Util.render(res, { success: false, msg: error });
+  }
 });
 
 /**
@@ -436,7 +436,7 @@ router.get('/:productId', getProduct, async (req, res) => {
  *                       items:
  *                        type: object
  *                        properties:
-  *                          _id:
+ *                          _id:
  *                            type: string
  *                            example: 629e02d9ef765441783a3cc5
  *                          productName:
@@ -462,7 +462,7 @@ router.get('/:productId', getProduct, async (req, res) => {
  *                            example: 629e02d9ef765441783a3cc5
  *                          productImage:
  *                            type: array
- *                             items:{} 
+ *                             items:{}
  *                            example:
  *                                   - - val: "https://s3.amazon.com/helmet1"
  *                                       sequence: 1
@@ -474,7 +474,7 @@ router.get('/:productId', getProduct, async (req, res) => {
  *                          updatedAt:
  *                            type: date
  *                            example: 2022-06-06T13:36:25.766Z
- *                      
+ *
  *                     limit:
  *                       type: integer
  *                       example: 10
@@ -503,19 +503,19 @@ router.get('/:productId', getProduct, async (req, res) => {
  *                   example: An error occurs.
  */
 router.get('/', getUser, async (req, res) => {
-    try {
-        const result = await ProductService.getProduct({
-            query: req.query,
-        });
+  try {
+    const result = await ProductService.getProduct({
+      query: req.query,
+    });
 
-        if (result.error) {
-            return Util.render(res, { success: false, msg: result.error });
-        }
-
-        return Util.render(res, result);
-    } catch (error) {
-        return Util.render(res, { success: false, msg: error });
+    if (result.error) {
+      return Util.render(res, { success: false, msg: result.error });
     }
+
+    return Util.render(res, result);
+  } catch (error) {
+    return Util.render(res, { success: false, msg: error });
+  }
 });
 
 /**
@@ -588,17 +588,17 @@ router.get('/', getUser, async (req, res) => {
  *                   example: An Error Occured While Deleting Product
  */
 router.delete('/:productId', getProduct, async (req, res) => {
-    try {
-        const result = await ProductService.deleteProduct({ params: req.params });
+  try {
+    const result = await ProductService.deleteProduct({ params: req.params });
 
-        if (result.error) {
-            return Util.render(res, { success: false, msg: result.error });
-        }
-
-        return Util.render(res, result);
-    } catch (error) {
-        return Util.render(res, { success: false, msg: error });
+    if (result.error) {
+      return Util.render(res, { success: false, msg: result.error });
     }
+
+    return Util.render(res, result);
+  } catch (error) {
+    return Util.render(res, { success: false, msg: error });
+  }
 });
 
 module.exports = router;
