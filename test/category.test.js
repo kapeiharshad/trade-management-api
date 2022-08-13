@@ -25,7 +25,7 @@ describe(`Category API's test cases`, function () {
       categoryName: 'nut bolt',
     };
     const response = await request(app)
-      .post('/categories/')
+      .post('/category/')
       .send(categoryObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
@@ -42,17 +42,17 @@ describe(`Category API's test cases`, function () {
   it('Should get error of required category name whlie create a category sucessfully', async function () {
     const categoryObj = {};
     const response = await request(app)
-      .post('/categories/')
+      .post('/category/')
       .send(categoryObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errorMsg');
     expect(response.body).toHaveProperty(
-      'msg',
-      `categoryName is invalid of 'categoryName' at body location.`,
+      'errorMsg[0].msg',
+      `categoryName is invalid`,
     );
-    expect(response.body).toHaveProperty('errors');
   });
 
   it('Test case to edit a category sucessfully', async function () {
@@ -60,24 +60,7 @@ describe(`Category API's test cases`, function () {
       categoryName: 'nut bolt',
     };
     const response = await request(app)
-      .patch(`/categories/${categoryId}`)
-      .send(categoryObj)
-      .set('Accept', 'application/json')
-      .set('Authorization', 'Bearer ' + adminToken);
-    expect(response.status).toEqual(200);
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty(
-      'msg',
-      'Category Updated Successfully',
-    );
-    userId = response.body.id;
-  });
-  it('Test case to edit a category sucessfully', async function () {
-    const categoryObj = {
-      categoryName: 'nut bolt',
-    };
-    const response = await request(app)
-      .patch(`/categories/${categoryId}`)
+      .patch(`/category/${categoryId}`)
       .send(categoryObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
@@ -93,17 +76,17 @@ describe(`Category API's test cases`, function () {
   it('Should get error of required category name whlie editing a category sucessfully', async function () {
     const categoryObj = {};
     const response = await request(app)
-      .patch(`/categories/${categoryId}`)
+      .patch(`/category/${categoryId}`)
       .send(categoryObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errorMsg');
     expect(response.body).toHaveProperty(
-      'msg',
-      `categoryName is invalid of 'categoryName' at body location.`,
+      'errorMsg[0].msg',
+      `categoryName is invalid`,
     );
-    expect(response.body).toHaveProperty('errors');
   });
 
   it('Should get error of incorrect categoryId whlie editing a category sucessfully', async function () {
@@ -112,18 +95,18 @@ describe(`Category API's test cases`, function () {
     };
     const categoryId1 = '629e02d9ef765441783a3cc5';
     const response = await request(app)
-      .patch(`/categories/${categoryId1}`)
+      .patch(`/category/${categoryId1}`)
       .send(categoryObj)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    expect(response.status).toEqual(404);
+    expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', `Category Not Found`);
+    expect(response.body).toHaveProperty('errors[0].msg', `Category Not Found`);
   });
 
   it('Test case to get category by ID', async function () {
     const response = await request(app)
-      .get(`/categories/${categoryId}`)
+      .get(`/category/${categoryId}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
@@ -141,17 +124,17 @@ describe(`Category API's test cases`, function () {
   it('Should get error of incorrect categoryId whlie getting a category by id', async function () {
     const categoryId1 = '629e02d9ef765441783a3cc5';
     const response = await request(app)
-      .get(`/categories/${categoryId1}`)
+      .get(`/category/${categoryId1}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    expect(response.status).toEqual(404);
+    expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', `Category Not Found`);
+    expect(response.body).toHaveProperty('errors[0].msg', `Category Not Found`);
   });
 
   it('Test case to delete category by ID', async function () {
     const response = await request(app)
-      .delete(`/categories/${categoryId}`)
+      .delete(`/category/${categoryId}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);
@@ -165,17 +148,17 @@ describe(`Category API's test cases`, function () {
   it('Should get error of incorrect categoryId whlie deleting a category by id', async function () {
     const categoryId1 = '629e02d9ef765441783a3cc5';
     const response = await request(app)
-      .delete(`/categories/${categoryId1}`)
+      .delete(`/category/${categoryId1}`)
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
-    expect(response.status).toEqual(404);
+    expect(response.status).toEqual(400);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('msg', `Category Not Found`);
+    expect(response.body).toHaveProperty('errors[0].msg', `Category Not Found`);
   });
 
   it('Test case to get all categories', async function () {
     const response = await request(app)
-      .get('/categories?limit=10&page=1&sortDirection=desc')
+      .get('/category?limit=10&page=1&sortDirection=desc&sortKey=_id')
       .set('Accept', 'application/json')
       .set('Authorization', 'Bearer ' + adminToken);
     expect(response.status).toEqual(200);

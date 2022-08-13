@@ -1,7 +1,8 @@
-const User = require('../models/users.model');
+const User = require('../models/user.model');
 const logger = require('../helpers/logger.helper');
 const pagination = require('../helpers/pagination.helper');
 const mongoose = require('mongoose');
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 
 class UserService {
   static async addUser({ body }) {
@@ -39,7 +40,8 @@ class UserService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'User added unsuccessfully.',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'User added unsuccessfully.',
         };
       }
     } catch (error) {
@@ -47,7 +49,8 @@ class UserService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while adding user',
       };
     }
   }
@@ -96,7 +99,8 @@ class UserService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'User not found or no content to modify.',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'User not found or no content to modify.',
         };
       }
     } catch (error) {
@@ -104,7 +108,8 @@ class UserService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occurs',
       };
     }
   }
@@ -137,7 +142,8 @@ class UserService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while getting users',
       };
     }
   }
@@ -159,7 +165,8 @@ class UserService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'User not found.',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'User not found.',
         };
       }
     } catch (error) {
@@ -167,7 +174,8 @@ class UserService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while getting user by id',
       };
     }
   }
@@ -188,7 +196,8 @@ class UserService {
         return {
           success: false,
           statusCode: 400,
-          msg: 'User not found or deleted unsuccessfully.',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'User not found or deleted unsuccessfully.',
         };
       }
     } catch (error) {
@@ -196,7 +205,8 @@ class UserService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An error occurs',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An error occured while deleting user by id',
       };
     }
   }

@@ -48,7 +48,8 @@ describe(`Auth API's test cases`, function () {
     const response = await request(app)
       .post('/auth/logout')
       .send(reqObj)
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Authorization', 'Bearer ' + adminToken);
 
     expect(response.status).toEqual(200);
     expect(response.body).toHaveProperty('success', true);

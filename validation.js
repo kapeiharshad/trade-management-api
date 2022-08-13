@@ -5,7 +5,7 @@ const {
   authentication,
   checkDuplicates,
 } = require('./middlewares/customValidation.middleware');
-const User = require('./models/users.model');
+const User = require('./models/user.model');
 
 exports.addUser = [
   authentication(),
@@ -37,6 +37,7 @@ exports.addUser = [
 ];
 
 exports.editUser = [
+  authentication(),
   check('userId').custom(value => {
     if (ObjectID.isValid(value)) {
       return value;
@@ -73,6 +74,7 @@ exports.editUser = [
 ];
 
 exports.getUser = [
+  authentication(),
   check('limit')
     .matches(/^\d+$/)
     .withMessage('must contain a whole number')
@@ -96,6 +98,7 @@ exports.getUser = [
 ];
 
 exports.getUserById = [
+  authentication(),
   check('userId').custom(value => {
     if (ObjectID.isValid(value)) {
       return value;
@@ -107,6 +110,7 @@ exports.getUserById = [
 ];
 
 exports.deleteUser = [
+  authentication(),
   check('userId').custom(value => {
     if (ObjectID.isValid(value)) {
       return value;
@@ -166,6 +170,7 @@ exports.resetPassword = [
 ];
 
 exports.logoutValidation = [
+  authentication(),
   check('token')
     .isString()
     .withMessage('must be a valid string')
@@ -263,6 +268,7 @@ exports.createProduct = [
 ];
 
 exports.editProduct = [
+  authentication(),
   check('productId').custom(value => {
     if (ObjectID.isValid(value)) {
       return value;
