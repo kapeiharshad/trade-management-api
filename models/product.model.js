@@ -48,6 +48,10 @@ const ProductSchema = new Schema(
       enum: ['active', 'inactive'],
       default: 'active',
     },
+    productOutOfStock: {
+      type: Boolean,
+      default: [false],
+    },
   },
   {
     collection: 'products',

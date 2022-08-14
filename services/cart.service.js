@@ -18,7 +18,7 @@ class CartService {
         ),
         Product.findOne(
           { _id: mongoose.Types.ObjectId(body.productId) },
-          { productStatus: 1 },
+          { productStatus: 1, productOutOfStock: 1 },
         ),
       ]);
 
@@ -27,8 +27,9 @@ class CartService {
         !productData._id ||
         !productData.productStatus ||
         (productData &&
-          productData.productStatus &&
-          productData.productStatus != 'active')
+          ((productData.productStatus &&
+            productData.productStatus != 'active') ||
+            productData.productOutOfStock))
       )
         return {
           statusCode: 400,
@@ -281,11 +282,7 @@ class CartService {
         const cartValueOfActiveProductsWithDiscount = sumBy(
           allCartData,
           function (o) {
-            if (
-              o.productId &&
-              o.productId.productStatus &&
-              o.productId.productStatus == 'active'
-            ) {
+            if (o.productId && !o.productId.productOutOfStock) {
               return o.cartValueWithDiscount;
             }
           },
@@ -294,11 +291,7 @@ class CartService {
         const cartValueOfActiveProductsWithoutDiscount = sumBy(
           allCartData,
           function (o) {
-            if (
-              o.productId &&
-              o.productId.productStatus &&
-              o.productId.productStatus == 'active'
-            ) {
+            if (o.productId && !o.productId.productOutOfStock) {
               return o.cartValueWithoutDiscount;
             }
           },
