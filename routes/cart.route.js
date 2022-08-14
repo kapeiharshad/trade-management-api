@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const CartService = require('../services/carts.service');
+const CartService = require('../services/cart.service');
 const Util = require('../helpers/util.helper');
-const { addToCart } = require('../validation');
+const { addToCart, cartIdValidation, validUser } = require('../validation');
 
-router.post('/', addToCart, async (req, res) => {
+router.post('/', validUser, addToCart, async (req, res) => {
   try {
     const userData = { _id: req.userData._id };
 
@@ -20,7 +20,7 @@ router.post('/', addToCart, async (req, res) => {
   }
 });
 
-router.get('/:cartId', async (req, res) => {
+router.get('/:cartId', validUser, cartIdValidation, async (req, res) => {
   try {
     const result = await CartService.getOneCart({ params: req.params });
 
@@ -35,7 +35,7 @@ router.get('/:cartId', async (req, res) => {
   }
 });
 
-router.delete('/:cartId', addToCart, async (req, res) => {
+router.delete('/:cartId', validUser, cartIdValidation, async (req, res) => {
   try {
     const userData = { _id: req.userData._id };
 
@@ -55,7 +55,7 @@ router.delete('/:cartId', addToCart, async (req, res) => {
   }
 });
 
-router.patch('/:cartId', addToCart, async (req, res) => {
+router.patch('/:cartId', validUser, cartIdValidation, async (req, res) => {
   try {
     const userData = { _id: req.userData._id };
 
@@ -76,7 +76,7 @@ router.patch('/:cartId', addToCart, async (req, res) => {
   }
 });
 
-router.get('/', addToCart, async (req, res) => {
+router.get('/', validUser, async (req, res) => {
   try {
     const userData = { _id: req.userData._id };
 

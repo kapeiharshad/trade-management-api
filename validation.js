@@ -332,4 +332,28 @@ exports.getProduct = [
   }),
   checkValidation(),
 ];
-exports.addToCart = [authentication()];
+exports.addToCart = [
+  check('productId').custom(value => {
+    if (ObjectID.isValid(value)) {
+      return value;
+    } else {
+      throw new Error('Invalid objectId');
+    }
+  }),
+  check('quantity')
+    .matches(/^\d+$/)
+    .withMessage('must contain a whole number')
+    .optional(),
+  checkValidation(),
+];
+exports.cartIdValidation = [
+  check('cartId').custom(value => {
+    if (ObjectID.isValid(value)) {
+      return value;
+    } else {
+      throw new Error('Invalid objectId');
+    }
+  }),
+  checkValidation(),
+];
+exports.validUser = [authentication()];

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-const Cart = require('../models/carts.model');
-const Product = require('../models/products.model');
+const Cart = require('../models/cart.model');
+const Product = require('../models/product.model');
 const logger = require('../helpers/logger.helper');
 const { isEqual, sumBy } = require('lodash');
 const Util = require('../helpers/util.helper');
+const errorName = require('../constants/messages.constant').ERROR_NAME;
 class CartService {
   static async addToCart({ body, userData }) {
     try {
@@ -32,14 +33,16 @@ class CartService {
         return {
           statusCode: 400,
           success: false,
-          msg: 'Product Is Not Available For Adding In Cart',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Product Is Not Available For Adding In Cart',
         };
 
       if (cartData && cartData._id)
         return {
           success: false,
           statusCode: 400,
-          msg: 'This Product Is Already In Your Cart',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'This Product Is Already In Your Cart',
         };
 
       const saveObj = {
@@ -60,7 +63,8 @@ class CartService {
       return {
         success: false,
         statusCode: 400,
-        msg: 'Failed To Add Product In Cart',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Add Product In Cart',
       };
     } catch (error) {
       logger.error('From add to cart error', { errorMsg: error });
@@ -68,7 +72,8 @@ class CartService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Adding Product In Cart',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Adding Product In Cart',
       };
     }
   }
@@ -104,7 +109,8 @@ class CartService {
       return {
         statusCode: 400,
         success: false,
-        msg: 'No Data Found In Cart',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'No Data Found In Cart',
       };
     } catch (error) {
       logger.error('From get one cart error', { errorMsg: error });
@@ -112,20 +118,24 @@ class CartService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Getting Product From Cart',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Getting Product From Cart',
       };
     }
   }
 
   static async removeProductByCartId({ params, userData }) {
     try {
-      const cartData = await Cart.findOne({ _id: ObjectId(params.cartId) });
+      const cartData = await Cart.findOne({
+        _id: mongoose.Types.ObjectId(params.cartId),
+      });
 
       if (!cartData || !cartData._id)
         return {
           statusCode: 400,
           success: false,
-          msg: 'Product Not Found In Cart',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Product Not Found In Cart',
         };
 
       if (
@@ -137,7 +147,9 @@ class CartService {
         return {
           statusCode: 400,
           success: false,
-          msg: 'You Are Not An Authorized User To Remove This Product From Cart',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg:
+            'You Are Not An Authorized User To Remove This Product From Cart',
         };
 
       const removeOutput = await Cart.deleteOne({
@@ -154,7 +166,8 @@ class CartService {
       return {
         statusCode: 400,
         success: false,
-        msg: 'Failed To Remove Product From Cart',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Remove Product From Cart',
       };
     } catch (error) {
       logger.error('From removeProductByCartId error', { errorMsg: error });
@@ -162,7 +175,8 @@ class CartService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Removing Product From Cart',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Removing Product From Cart',
       };
     }
   }
@@ -177,7 +191,8 @@ class CartService {
         return {
           statusCode: 400,
           success: false,
-          msg: 'Product Not Found In Cart',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'Product Not Found In Cart',
         };
 
       if (
@@ -189,7 +204,8 @@ class CartService {
         return {
           statusCode: 400,
           success: false,
-          msg: 'You Are Not An Authorized User To Change Product Quantity',
+          errorName: errorName.__FAILED_EXECUTION,
+          errorMsg: 'You Are Not An Authorized User To Change Product Quantity',
         };
 
       const updateOutput = await Cart.updateOne(
@@ -209,7 +225,8 @@ class CartService {
       return {
         statusCode: 400,
         success: false,
-        msg: 'Failed To Change Product Quantity',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'Failed To Change Product Quantity',
       };
     } catch (error) {
       logger.error('From changeProductQuantityByCartId error', {
@@ -219,7 +236,8 @@ class CartService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Changing Quantity Of Product In Cart',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Changing Quantity Of Product In Cart',
       };
     }
   }
@@ -315,7 +333,8 @@ class CartService {
       return {
         statusCode: 400,
         success: false,
-        msg: 'No Products Found In Cart',
+        errorName: errorName.__FAILED_EXECUTION,
+        errorMsg: 'No Products Found In Cart',
       };
     } catch (error) {
       logger.error('From get cart error', { errorMsg: error });
@@ -323,7 +342,8 @@ class CartService {
       return {
         success: false,
         statusCode: 500,
-        msg: 'An Error Occured While Getting All Products From Cart',
+        errorName: errorName.__INTERNAL_SERVER_ERROR,
+        errorMsg: 'An Error Occured While Getting All Products From Cart',
       };
     }
   }

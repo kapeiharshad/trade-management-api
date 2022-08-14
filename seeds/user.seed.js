@@ -10,4 +10,15 @@ module.exports = [
     userType: 'admin',
     status: 'active',
   },
+  {
+    userName: 'user01',
+    firstName: 'user',
+    lastName: 'test',
+    email: 'user@yopmail.com',
+    gender: 'Male',
+    password: 'password',
+    contact: '9242642351',
+    userType: 'user',
+    status: 'active',
+  },
 ];
